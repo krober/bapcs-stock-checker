@@ -68,3 +68,4 @@ modules.xml
 /venv
 conf.csv
 price-history.txt
+/src/praw.ini
