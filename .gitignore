@@ -1,0 +1,3 @@
+*.ini
+.idea/*
+posts_replied_to.txt
