@@ -6,7 +6,8 @@ import praw
 
 # fixes sys.argv launching ModuleNotFoundError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from src import microcenter, formatters
+from src import formatters
+from src.stores import microcenter
 
 
 def get_func(url: str):
