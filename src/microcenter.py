@@ -53,12 +53,9 @@ def get_inventories(url: str, stores: list, in_store_only: bool):
     :param in_store_only: bool, is product in store only?
     :return: list of tuples, store name, inventory, sorted alphabetically by store
     """
-    iter_for_test = 0
     pattern = '(?s)(?<=inventoryCnt">)(.*?)(?=<)'
     inventories = []
     for store_number, store_name in stores:
-        if iter_for_test == 4:
-            break
         if store_number == '029' and in_store_only:  # skip web store, <span> doesn't exist and will error
             inventories.append(tuple((store_name, 'In Store Only')))
         else:
@@ -66,7 +63,6 @@ def get_inventories(url: str, stores: list, in_store_only: bool):
             inventory = re.search(pattern, html).group(0).strip()
             inventories.append(tuple((store_name, inventory)))
         time.sleep(2)  # don't spam MC server?
-        iter_for_test += 1
     inventories.sort(key=lambda store: store[0])
     return inventories
 
