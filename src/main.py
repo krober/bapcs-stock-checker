@@ -56,7 +56,6 @@ class Bot:
                     metadata.get('price'),
                     datetime.date.today(),
                     site_name)
-
         session = Session()
         session.add(post)
         session.commit()
