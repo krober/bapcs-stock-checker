@@ -81,8 +81,8 @@ def get_metadata(html: str):
     pattern = "(?s)(?<=dataLayer = \[)(.*?)(?=\];)"
     all_metadata = extract_from_html(pattern, html)
     metadata = {
-        'price': all_metadata['productPrice'],
-        'store_only': True if all_metadata['AvailabilityCode'] == 'Available for In-Store Pickup Only.' else False,
+        'price': int(round(float(all_metadata['productPrice']))),
+        'store_only': 'Yes' if all_metadata['AvailabilityCode'] == 'Available for In-Store Pickup Only.' else 'No',
         'mpn': all_metadata['mpn'],
     }
     return metadata

@@ -1,7 +1,7 @@
-def build_markdown(locations: list, metadata: dict):
+def build_markdown(inventories: list, metadata: dict):
     """
     given locations(location, inventory) and metadata, return reddit-structured markdown
-    :param locations: list of tuples, (location, inventory)
+    :param inventories: list of tuples, (location, inventory)
     :param metadata: dict, should include mpn and price at minimum, optionally store_only
     :return: str, markdown formatted
     """
