@@ -57,8 +57,8 @@ class Bot:
         else:
             print('replied')
 
-    def rate_limit_handler(self, e: str):
-        wait_mins = 1 + [int(c) for c in e.split() if c.isdigit()][0]
+    def rate_limit_handler(self, message: str):
+        wait_mins = 1 + [int(c) for c in message.split() if c.isdigit()][0]
         print(f'Waiting {wait_mins} mins, then restarting...')
         time.sleep(wait_mins * 60)
         self.run()
