@@ -3,6 +3,8 @@ chardet==3.0.4
 idna==2.7
 praw==5.4.0
 prawcore==0.14.0
+PyMySQL==0.8.1
 requests==2.19.1
+SQLAlchemy==1.2.8
 update-checker==0.16
 urllib3==1.23
