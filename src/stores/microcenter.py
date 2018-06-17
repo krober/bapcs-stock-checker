@@ -45,24 +45,26 @@ def get_stores(html: str):
     return store_list
 
 
-def get_inventories(url: str, stores: list, in_store_only: bool):
+def get_inventories(url: str, stores: list):
     """
     given item url, list of stores, and store_only, return all store inventories
     :param url: str, base product url
     :param stores: list of tuples of store number, store name
-    :param in_store_only: bool, is product in store only?
     :return: list of tuples, store name, inventory, sorted alphabetically by store
     """
     pattern = '(?s)(?<=inventoryCnt">)(.*?)(?=<)'
     inventories = []
     for store_number, store_name in stores:
-        if store_number == '029' and in_store_only:  # skip web store, <span> doesn't exist and will error
-            inventories.append(tuple((store_name, 'In Store Only')))
-        else:
-            html = get_html(url, store_number)
+        html = get_html(url, store_number)
+        try:
             inventory = re.search(pattern, html).group(0).strip()
-            inventories.append(tuple((store_name, inventory)))
-        time.sleep(2)  # don't spam MC server?
+        except AttributeError as e:
+            # No inventoryCnt class found = only avail in store or sold out at location
+            print(e)
+        else:
+            if inventory != 'Sold Out':
+                inventories.append(tuple((store_name, inventory)))
+        # time.sleep(1)  # don't spam MC server?
     inventories.sort(key=lambda store: store[0])
     return inventories
 
@@ -93,7 +95,7 @@ def mc_run(url: str):
     metadata = get_metadata(html)
 
     stores = get_stores(html)
-    inventories = get_inventories(url, stores, metadata['store_only'])
+    inventories = get_inventories(url, stores)
 
     return inventories, metadata
 
