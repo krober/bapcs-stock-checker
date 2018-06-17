@@ -90,6 +90,21 @@ class Bot:
         self.run()
 
 
+def get_func(url: str):
+    """
+    given a url, if found in site_funcs, return corresponding site function
+    :param url: str
+    :return: site name, function; function to run to receive corresponding site data; None if not found
+    """
+    site_funcs = {
+        'microcenter.com': microcenter.mc_run
+    }
+    for site, func in site_funcs.items():
+        if site in url:
+            return site, func
+    return None
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         subreddit = sys.argv[1]
