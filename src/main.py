@@ -54,7 +54,8 @@ class Bot:
             print(e.error_type, e.message)
             if e.error_type == 'RATELIMIT':
                 self.rate_limit_handler(e.message)
-        print('replied')
+        else:
+            print('replied')
 
     def rate_limit_handler(self, e: str):
         wait_mins = 1 + [int(c) for c in e.split() if c.isdigit()][0]
