@@ -9,21 +9,8 @@ import praw
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src import formatters
 from src.stores import microcenter
-
-
-def get_func(url: str):
-    """
-    given a url, if found in site_funcs, return corresponding site function
-    :param url: str
-    :return: function, function to run to receive corresponding site data; None if not found
-    """
-    site_funcs = {
-        'microcenter.com': microcenter.mc_run
-    }
-    for site, func in site_funcs.items():
-        if site in url:
-            return func
-    return None
+from src.models.post import Post
+from src.sql_base import Session
 
 
 class Bot:
@@ -64,18 +51,17 @@ class Bot:
             print('replied')
 
     def log_reply(self, submission, metadata: dict, site_name: str):
-        line = '{id},{mpn},{price},{date},{site}\n'
-        line = line.format(
-            id=submission.id,
-            mpn=metadata.get("mpn"),
-            price=metadata.get("price"),
-            date=datetime.date.today(),
-            site=site_name,
-        )
-        with open('posts.csv', 'a') as f:
-            f.write(line)
-        print('logged')
+        post = Post(submission.id,
+                    metadata.get('mpn'),
+                    metadata.get('price'),
+                    datetime.date.today(),
+                    site_name)
 
+        session = Session()
+        session.add(post)
+        session.commit()
+        session.close()
+        print('logged')
 
     def load_replied(self):
         with open('posts.csv', 'r') as f:
