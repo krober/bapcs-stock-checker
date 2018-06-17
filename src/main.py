@@ -48,6 +48,7 @@ class Bot:
             print(e.error_type, e.message)
             if e.error_type == 'RATELIMIT':
                 self.rate_limit_handler(e.message)
+                self.submit_reply(submission, markdown)
         else:
             print('replied')
 
