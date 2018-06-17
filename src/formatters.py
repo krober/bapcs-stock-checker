@@ -16,39 +16,41 @@ def build_markdown(inventories: list, metadata: dict):
         'Newegg': 'https://www.newegg.com/Product/ProductList.aspx?Submit=ENE&DEPA=0&Description='
     }
 
-    mpn = metadata.get('mpn')
-    price = metadata.get('price')
-    in_store_only = 'Yes' if metadata.get('store_only') else 'No'
+    meta_section = get_meta_section(metadata)
+    inv_section = get_inv_section(inventories) if inventories else 'No inventory found'
+    search_links = '|'.join([f'[{site}]({search_sites.get(site)}{metadata.get("mpn")})' for site in search_sites])
+    admin = 'Please PM for errors'
 
     line_split = '  \n\n'
 
-    meta_header = 'MPN|Price|Store Only\n'
-    meta_format = ':-|-:|:-:\n'
-    meta_body = f'{mpn}|{price}|{in_store_only}'
-
-    inv_header = 'Location|Quantity\n'
-    inv_format = ':-|-:\n'
-    inv_body = '\n'.join([f'{location}|{inventory}' for location, inventory in locations])
-
-    search_links = 'Find on ' + ' '.join([f'[{site}]({search_sites.get(site)}{mpn})' for site in search_sites])
-
-    admin = 'Please PM for errors'
-
     lines = [
-        meta_header,
-        meta_format,
-        meta_body,
-        line_split,
-        inv_header,
-        inv_format,
-        inv_body,
-        line_split,
+        meta_section,
+        inv_section,
         search_links,
-        line_split,
         admin,
     ]
 
-    return ''.join(lines)
+    return line_split.join(lines)
+
+
+def get_meta_section(metadata: dict):
+    mpn = metadata.get('mpn')
+    price = metadata.get('price')
+    store_only = metadata.get('store_only')
+
+    meta_header = 'MPN|Price|Store Only\n'
+    meta_format = ':-|-:|:-:\n'
+    meta_body = f'{mpn}|{price}|{store_only}'
+
+    return meta_header + meta_format + meta_body
+
+
+def get_inv_section(inventories: list):
+    inv_header = 'Location|Quantity\n'
+    inv_format = ':-|-:\n'
+    inv_body = '\n'.join([f'{location}|{inventory}' for location, inventory in inventories])
+
+    return inv_header + inv_format + inv_body
 
 
 if __name__ == '__main__':
