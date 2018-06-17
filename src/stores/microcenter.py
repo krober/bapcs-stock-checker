@@ -1,7 +1,6 @@
 import json
 import re
 import requests
-import time
 
 
 def get_html(url: str, store_num: str='095'):
