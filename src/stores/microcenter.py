@@ -71,7 +71,7 @@ def get_inventories(url: str, stores: list):
 
 def get_metadata(html: str):
     """
-    Given product data, return specific product attrs
+    Given html, return general product data
     :param html: str, raw html
     :return: dict, specified addl_product_attrs
     """
@@ -89,7 +89,7 @@ def mc_run(url: str):
     """
     Given a url, parse and return inventories by location and product metadata
     :param url: str, url to MC product
-    :return: tuple, list of tuples of inventories by location; metadata dict
+    :return: list of tuples of inventories by location; dict of metadata
     """
     html = get_html(url)
     metadata = get_metadata(html)
