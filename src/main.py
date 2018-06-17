@@ -5,6 +5,8 @@ import time
 
 import praw
 
+from sqlalchemy import exists
+
 # fixes sys.argv launching ModuleNotFoundError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src import formatters
@@ -23,9 +25,8 @@ class Bot:
     def run(self):
         print('streaming...')
         for submission in self.subreddit.stream.submissions():
-            replied_to = self.load_replied()
             print(f'found {submission.id}: {submission.title}')
-            if submission.id in replied_to:
+            if self.already_preplied_to(submission.id):
                 print('post already replied to')
                 continue
             url = submission.url
@@ -62,12 +63,10 @@ class Bot:
         session.close()
         print('logged')
 
-    def load_replied(self):
+    def already_preplied_to(self, submission_id: str):
         session = Session()
-        posts = session.query(Post.reddit_id).all()
-        replied_to = [post[0] for post in posts]
+        replied_to = session.query(exists().where(Post.reddit_id==submission_id)).scalar()
         session.close()
-        print('loaded')
         return replied_to
 
     def rate_limit_handler(self, message: str):
