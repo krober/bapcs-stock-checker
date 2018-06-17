@@ -10,10 +10,10 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True)
     reddit_id = Column(String(6))
-    mpn = Column(String(63))
+    mpn = Column(String(30))
     price = Column(Integer)
     date = Column(Date)
-    site = Column(String(63))
+    site = Column(String(50))
 
     def __init__(self,
                  reddit_id: str,
