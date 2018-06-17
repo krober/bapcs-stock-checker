@@ -15,8 +15,6 @@ from src.sql_base import Session
 
 class Bot:
     def __init__(self, sub_to_stream: str):
-        self.replied_to = []
-        self.load_replied()
         print(f'initializing on {sub_to_stream}...')
         self.reddit = praw.Reddit()
         self.subreddit = self.reddit.subreddit(sub_to_stream)
@@ -25,8 +23,9 @@ class Bot:
     def run(self):
         print('streaming...')
         for submission in self.subreddit.stream.submissions():
+            replied_to = self.load_replied()
             print(f'found {submission.id}: {submission.title}')
-            if submission.id in self.replied_to:
+            if submission.id in replied_to:
                 print('post already replied to')
                 continue
             url = submission.url
@@ -36,6 +35,7 @@ class Bot:
                 locations, metadata = site_func(url)
                 markdown = formatters.build_markdown(locations, metadata)
                 self.submit_reply(submission, markdown)
+                self.log_reply(submission, metadata, site_name)
             else:
                 print('No function mapped to this url')
 
@@ -64,10 +64,12 @@ class Bot:
         print('logged')
 
     def load_replied(self):
-        with open('posts.csv', 'r') as f:
-            for line in f:
-                self.replied_to.append(line.split(',')[0])
+        session = Session()
+        posts = session.query(Post.reddit_id).all()
+        replied_to = [post[0] for post in posts]
+        session.close()
         print('loaded')
+        return replied_to
 
     def rate_limit_handler(self, message: str):
         wait_mins = 1 + [int(c) for c in message.split() if c.isdigit()][0]
