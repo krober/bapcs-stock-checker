@@ -52,7 +52,7 @@ class Bot:
             else:
                 print('No function mapped to this url')
 
-    def submit_reply(self, submission: praw.Reddit.submission, markdown: str):
+    def submit_reply(self, submission, markdown: str):
         print('attempting reply...')
         try:
             submission.reply(markdown)

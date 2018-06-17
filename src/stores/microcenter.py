@@ -67,7 +67,6 @@ def get_inventories(url: str, stores: list):
         else:
             if inventory != 'Sold Out':
                 inventories.append(tuple((store_name, inventory)))
-        # time.sleep(1)  # don't spam MC server?
     inventories.sort(key=lambda store: store[0])
     return inventories
 
