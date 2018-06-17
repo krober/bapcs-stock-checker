@@ -74,7 +74,6 @@ class Bot:
         wait_mins = 1 + [int(c) for c in message.split() if c.isdigit()][0]
         print(f'Waiting {wait_mins} mins, then restarting...')
         time.sleep(wait_mins * 60)
-        self.run()
 
 
 def get_func(url: str):
@@ -96,7 +95,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         subreddit = sys.argv[1]
     else:
-        subreddit = 'buildapcsales'
+        subreddit = 'aJAPMASSOSCOS'
     print(subreddit)
     bot = Bot(subreddit)
     bot.run()
