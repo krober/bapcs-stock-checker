@@ -69,3 +69,4 @@ modules.xml
 conf.csv
 price-history.txt
 /src/praw.ini
+/src/db.ini
