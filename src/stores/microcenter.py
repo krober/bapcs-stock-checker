@@ -55,6 +55,9 @@ def get_inventories(url: str, stores: list):
     pattern = '(?s)(?<=inventoryCnt">)(.*?)(?=<)'
     inventories = []
     for store_number, store_name in stores:
+        if store_number == '029':
+            # skip web store
+            continue
         html = get_html(url, store_number)
         try:
             inventory = re.search(pattern, html).group(0).strip()
