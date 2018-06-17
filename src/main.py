@@ -32,8 +32,8 @@ class Bot:
             site_name, site_func = get_func(url)
             if site_func:
                 print('gathering data...')
-                locations, metadata = site_func(url)
-                markdown = formatters.build_markdown(locations, metadata)
+                inventories, metadata = site_func(url)
+                markdown = formatters.build_markdown(inventories, metadata)
                 self.submit_reply(submission, markdown)
                 self.log_reply(submission, metadata, site_name)
             else:
