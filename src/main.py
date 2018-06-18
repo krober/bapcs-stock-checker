@@ -88,16 +88,21 @@ class Bot:
         self.logger.info(f'Waiting {wait_mins} mins, then resubmitting...')
         return wait_mins
 
-    def get_func(self, url: str):
-        """
-        given a url, if found in site_funcs, return corresponding site function
-        :param url: str
-        :return: site name, function; function to run to receive corresponding site data; None if not found
-        """
-        for site, func in self.site_funcs.items():
-            if site in url:
-                return site, func
-        return None
+
+def main(sub_to_stream: str):
+    fatal_logger = logger.get_logger('Fatal', './logfile.log', logging.DEBUG)
+    wait_seconds = 90
+    max_uncaught = 10
+    attempts = 0
+    bot = Bot(sub_to_stream)
+    while attempts < max_uncaught:
+        try:
+            bot.run()
+        except Exception as e:
+            fatal_logger.critical(e)
+            fatal_logger.critical(f'restarting in {wait_seconds} seconds')
+            attempts += 1
+            time.sleep(wait_seconds)
 
 
 if __name__ == '__main__':
