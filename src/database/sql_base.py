@@ -1,4 +1,6 @@
 import configparser
+from contextlib import contextmanager
+from enum import Enum, auto
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -26,3 +28,26 @@ def load_engine(config_path: str):
 engine = load_engine('./database/db.ini')
 Session = sessionmaker(bind=engine)
 Base = declarative_base()
+
+
+class SessionMode(Enum):
+    READ = auto()
+    WRITE = auto()
+
+
+@contextmanager
+def session_scope(mode: SessionMode):
+    session = Session()
+    try:
+        yield session
+        if mode == SessionMode.WRITE:
+            session.commit()
+    except Exception as e:
+        session.rollback()
+        print(e)
+    finally:
+        session.close()
+
+
+
+

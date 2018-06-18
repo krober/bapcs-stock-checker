@@ -12,7 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.formatters import formatters
 from src.stores import microcenter
 from src.models.post import Post
-from src.database.sql_base import Session
+from src.database.sql_base import SessionMode, session_scope
 
 
 class Bot:
@@ -40,6 +40,10 @@ class Bot:
             else:
                 print('No function mapped to this url')
 
+    def already_preplied_to(self, submission_id: str):
+        with session_scope(SessionMode.READ) as session:
+            return session.query(exists().where(Post.reddit_id==submission_id)).scalar()
+
     def submit_reply(self, submission, markdown: str):
         print('attempting reply...')
         try:
@@ -58,10 +62,8 @@ class Bot:
                     metadata.get('price'),
                     datetime.date.today(),
                     site_name)
-        session = Session()
-        session.add(post)
-        session.commit()
-        session.close()
+        with session_scope(SessionMode.WRITE) as session:
+            session.add(post)
         print('logged')
 
     def already_preplied_to(self, submission_id: str):
