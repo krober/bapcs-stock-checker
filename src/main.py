@@ -16,6 +16,10 @@ from src.database.sql_base import SessionMode, session_scope
 
 
 class Bot:
+    site_funcs = {
+        'microcenter.com': microcenter.mc_run
+    }
+
     def __init__(self, sub_to_stream: str):
         print(f'initializing on {sub_to_stream}...')
         self.reddit = praw.Reddit()
@@ -30,7 +34,7 @@ class Bot:
                 print('post already replied to')
                 continue
             url = submission.url
-            site_name, site_func = get_func(url)
+            site_name, site_func = self.get_func(url)
             if site_func:
                 print('gathering data...')
                 inventories, metadata = site_func(url)
@@ -51,7 +55,7 @@ class Bot:
         except praw.exceptions.APIException as e:
             print(e.error_type, e.message)
             if e.error_type == 'RATELIMIT':
-                self.rate_limit_handler(e.message)
+                time.sleep(self.get_wait_time(e.message))
                 self.submit_reply(submission, markdown)
         else:
             print('replied')
@@ -66,31 +70,24 @@ class Bot:
             session.add(post)
         print('logged')
 
-    def already_preplied_to(self, submission_id: str):
-        session = Session()
-        replied_to = session.query(exists().where(Post.reddit_id==submission_id)).scalar()
-        session.close()
-        return replied_to
-
-    def rate_limit_handler(self, message: str):
-        wait_mins = 1 + [int(c) for c in message.split() if c.isdigit()][0]
+    def get_wait_time(self, message: str):
+        if 'seconds' in message:
+            wait_mins = 1
+        else:
+            wait_mins = 1 + [int(c) for c in message.split() if c.isdigit()][0]
         print(f'Waiting {wait_mins} mins, then restarting...')
-        time.sleep(wait_mins * 60)
+        return wait_mins
 
-
-def get_func(url: str):
-    """
-    given a url, if found in site_funcs, return corresponding site function
-    :param url: str
-    :return: site name, function; function to run to receive corresponding site data; None if not found
-    """
-    site_funcs = {
-        'microcenter.com': microcenter.mc_run
-    }
-    for site, func in site_funcs.items():
-        if site in url:
-            return site, func
-    return None
+    def get_func(self, url: str):
+        """
+        given a url, if found in site_funcs, return corresponding site function
+        :param url: str
+        :return: site name, function; function to run to receive corresponding site data; None if not found
+        """
+        for site, func in self.site_funcs.items():
+            if site in url:
+                return site, func
+        return None
 
 
 if __name__ == '__main__':
