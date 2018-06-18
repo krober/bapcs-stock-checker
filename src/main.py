@@ -49,6 +49,7 @@ class Bot:
     def get_func(self, url: str):
         for site, func in self.site_funcs.items():
             if site in url:
+                self.logger.info(f'found {site}')
                 return site, func
         self.logger.warning('No function mapped to this url')
         return None, None
