@@ -44,7 +44,7 @@ def session_scope(mode: SessionMode):
             session.commit()
     except Exception as e:
         session.rollback()
-        print(e)
+        raise e
     finally:
         session.close()
 
