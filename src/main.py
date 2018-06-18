@@ -33,7 +33,7 @@ class Bot:
         self.logger.info('streaming...')
         for submission in self.subreddit.stream.submissions():
             self.logger.info(f'found {submission.id}: {submission.title}')
-            if self.already_preplied_to(submission.id):
+            if self.already_replied_to(submission.id):
                 self.logger.info('post already replied to')
                 continue
             url = submission.url
@@ -54,7 +54,7 @@ class Bot:
         self.logger.warning('No function mapped to this url')
         return None, None
 
-    def already_preplied_to(self, submission_id: str):
+    def already_replied_to(self, submission_id: str):
         with session_scope(SessionMode.READ) as session:
             return session.query(exists().where(Post.reddit_id==submission_id)).scalar()
 
