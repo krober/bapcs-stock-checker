@@ -89,17 +89,18 @@ class Bot:
 
 
 def main(sub_to_stream: str):
-    fatal_logger = logger.get_logger('Fatal', './logfile.log', logging.CRITICAL)
+    wrapper_logger = logger.get_logger('Wrapper', './logfile.log', logging.INFO)
     wait_seconds = 90
     max_uncaught = 10
-    attempts = 0
+    attempts = 1
     bot = Bot(sub_to_stream)
-    while attempts < max_uncaught:
+    while attempts <= max_uncaught:
+        wrapper_logger.info(f'starting attempt {attempts}...')
         try:
             bot.run()
         except Exception as e:
-            fatal_logger.critical(e)
-            fatal_logger.critical(f'restarting in {wait_seconds} seconds')
+            wrapper_logger.critical(e)
+            wrapper_logger.critical(f'restarting in {wait_seconds} seconds')
             attempts += 1
             time.sleep(wait_seconds)
 
