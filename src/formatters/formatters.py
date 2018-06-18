@@ -19,7 +19,7 @@ def build_markdown(inventories: list, metadata: dict):
     meta_section = get_meta_section(metadata)
     inv_section = get_inv_section(inventories) if inventories else 'No inventory found'
     search_links = '|'.join([f'[{site}]({search_sites.get(site)}{metadata.get("mpn")})' for site in search_sites])
-    admin = 'Please PM for errors'
+    admin = 'Please PM for errors  \n[See on GitHub](https://github.com/krober/bapcs-stock-checker)'
 
     line_split = '  \n\n'
 
