@@ -65,7 +65,7 @@ class Bot:
         except praw.exceptions.APIException as e:
             self.logger.error(e.error_type, e.message)
             if e.error_type == 'RATELIMIT':
-                time.sleep(self.get_wait_time(e.message))
+                time.sleep(self.get_wait_time(e.message) * 60)
                 self.submit_reply(submission, markdown)
         else:
             self.logger.info('replied')
@@ -102,12 +102,10 @@ class Bot:
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        subreddit = sys.argv[1]
+        main(sys.argv[1])
     else:
-        subreddit = 'aJAPMASSOSCOS'
-    print(subreddit)
-    bot = Bot(subreddit)
-    bot.run()
+        main('aJAPMASSOSCOS')
+
 
 
 
