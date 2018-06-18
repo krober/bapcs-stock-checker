@@ -63,7 +63,7 @@ class Bot:
         try:
             submission.reply(markdown)
         except praw.exceptions.APIException as e:
-            self.logger.error(e.error_type, e.message)
+            self.logger.error(e.message)
             if e.error_type == 'RATELIMIT':
                 time.sleep(self.get_wait_time(e.message) * 60)
                 self.submit_reply(submission, markdown)
