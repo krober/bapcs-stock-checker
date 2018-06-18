@@ -24,7 +24,6 @@ class Bot:
 
     def __init__(self, sub_to_stream: str):
         self.logger = logger.get_logger('Bot', './logfile.log', logging.DEBUG)
-
         self.logger.info(f'initializing on {sub_to_stream}...')
         self.reddit = praw.Reddit()
         self.subreddit = self.reddit.subreddit(sub_to_stream)
