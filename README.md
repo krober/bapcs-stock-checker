@@ -1,7 +1,7 @@
-#Language  
+# Language  
 Python  
 
-#Libraries  
+# Libraries  
 PRAW  
 Requests  
 SQLAlchemly  
@@ -9,16 +9,17 @@ PyMySQL
 
 \+ addl dependencies, all included in requirements.txt  
 
-#Requirements  
+# Requirements  
 
 + Everything installed
 + MySQL (or other, but will change library reqs) server running
 + The following files:  
 
-####File Requirements  
+#### File Requirements  
 (examples found in /examples)  
 
 + praw.ini placed in /src/  
+
     to configure:
     + go [here](https://www.reddit.com/prefs/apps/)
     + scroll down
