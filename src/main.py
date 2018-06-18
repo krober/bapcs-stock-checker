@@ -90,7 +90,7 @@ class Bot:
 
 
 def main(sub_to_stream: str):
-    fatal_logger = logger.get_logger('Fatal', './logfile.log', logging.DEBUG)
+    fatal_logger = logger.get_logger('Fatal', './logfile.log', logging.CRITICAL)
     wait_seconds = 90
     max_uncaught = 10
     attempts = 0
