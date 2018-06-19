@@ -101,7 +101,11 @@ def mc_run(url: str):
     return inventories, metadata
 
 
-if __name__ == '__main__':
+def main():
     pass
+
+
+if __name__ == '__main__':
+    main()
 
 
