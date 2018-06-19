@@ -2,7 +2,7 @@ import datetime
 
 from sqlalchemy import Column, Date, Integer, String
 
-from src.database.sql_base import Base
+from database.sql_base import Base
 
 
 class Post(Base):

@@ -10,11 +10,12 @@ from sqlalchemy import exists
 
 # fixes sys.argv launching ModuleNotFoundError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from src.formatters import formatters
-from src.logger import logger
-from src.stores import microcenter
-from src.models.post import Post
-from src.database.sql_base import SessionMode, session_scope
+
+from formatters import formatters
+from logger import logger
+from stores import microcenter
+from models.post import Post
+from database.sql_base import SessionMode, session_scope
 
 
 class Bot:
