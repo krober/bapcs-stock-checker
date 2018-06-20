@@ -42,11 +42,7 @@ class Bot:
         self.logger.info('streaming...')
         for submission in self.subreddit.stream.submissions():
             self.logger.info(f'found {submission.fullname}: {submission.title}')
-            if submission.fullname in FOLLOWED_THIS_SESSION:
-                self.logger.info('post already attempted this session')
-                continue
-            if self.already_replied_to(submission.fullname):
-                self.logger.info('post already replied to')
+            if self.has_been_parsed(submission):
                 continue
             site_name, site_func = self.get_site_func(submission.url)
             if site_func:
@@ -71,14 +67,29 @@ class Bot:
         self.logger.warning(f'No function mapped to {url[:url.find(".com")+4]}')
         return None, None
 
-    def already_replied_to(self, submission_fullname: str):
+    def has_been_parsed(self, submission: praw.Reddit.submission):
         """
-        Checks db for submission_fullname against reddit_fullname
-        :param submission_fullname: str, praw.Reddit.submission.fullname
+        Determines whether post has already been written to db or has
+        been checked during the current bot session
+        :param submission: praw.Reddit.submission, submission to test against
+        :return: bool, True if has been parsed, else False
+        """
+        if submission.fullname in FOLLOWED_THIS_SESSION:
+            self.logger.info('post already followed this session')
+            return True
+        elif self.already_replied_to(submission):
+            self.logger.info('post already replied to')
+            return True
+        return False
+
+    def already_replied_to(self, submission: praw.Reddit.submission):
+        """
+        Checks db for submission.fullname against reddit_fullname
+        :param submission: praw.Reddit.submission, submission to test against
         :return: bool, true if found in db, else false
         """
         with session_scope(SessionMode.READ) as session:
-            return session.query(exists().where(Post.reddit_fullname==submission_fullname)).scalar()
+            return session.query(exists().where(Post.reddit_fullname==submission.fullname)).scalar()
 
     def submit_reply(self, submission: praw.Reddit.submission, markdown: str):
         """
