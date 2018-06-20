@@ -35,8 +35,7 @@ class Bot:
             if self.already_replied_to(submission.fullname):
                 self.logger.info('post already replied to')
                 continue
-            url = submission.url
-            site_name, site_func = self.get_func(url)
+            site_name, site_func = self.get_site_func(submission.url)
             if site_func:
                 self.logger.info('gathering data...')
                 post, markdown = site_func(submission)
@@ -44,7 +43,7 @@ class Bot:
                 self.log_reply(post)
             self.logger.info('waiting for next submission...')
 
-    def get_func(self, url: str):
+    def get_site_func(self, url: str):
         for site, func in self.site_funcs.items():
             if site in url:
                 self.logger.info(f'found {site}')
@@ -56,7 +55,7 @@ class Bot:
         with session_scope(SessionMode.READ) as session:
             return session.query(exists().where(Post.reddit_fullname==submission_fullname)).scalar()
 
-    def submit_reply(self, submission, markdown: str):
+    def submit_reply(self, submission: praw.Reddit.submission, markdown: str):
         self.logger.info('attempting reply...')
         try:
             submission.reply(markdown)

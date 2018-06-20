@@ -66,6 +66,7 @@ def get_inventories(url: str, stores: list):
             inventory = re.search(pattern, html).group(0).strip()
         except AttributeError as e:
             # No inventoryCnt class found = only avail in store or sold out at location
+            # TODO change to log
             print(e)
         else:
             if inventory != 'Sold Out':
