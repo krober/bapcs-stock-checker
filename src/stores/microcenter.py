@@ -1,10 +1,15 @@
+import logging
 import datetime
 import json
 import re
 import requests
 
 from formatters import formatters
+from logger import logger
 from models.post import Post
+
+
+mc_logger = logger.get_logger('Microcenter', '../logfile.log', logging.INFO)
 
 
 def get_html(url: str, store_num: str='095'):
@@ -62,11 +67,12 @@ def get_inventories(url: str, stores: list):
             # skip web store
             continue
         html = get_html(url, store_number)
+        data = re.search(pattern, html)
         try:
-            inventory = re.search(pattern, html).group(0).strip()
+            inventory = data.group(0).strip()
         except AttributeError as e:
             # No inventoryCnt class found = only avail in store or sold out at location
-            # TODO change to log
+            mc_logger.error(f'get_inventories: AttributeError: {e}')
             print(e)
         else:
             if inventory != 'Sold Out':
