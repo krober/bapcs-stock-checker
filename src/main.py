@@ -16,7 +16,7 @@ from models.post import Post
 from database.sql_base import SessionMode, session_scope
 
 
-BAD_LINKS = []
+FOLLOWED_THIS_SESSION = []
 
 
 class Bot:
@@ -42,7 +42,7 @@ class Bot:
         self.logger.info('streaming...')
         for submission in self.subreddit.stream.submissions():
             self.logger.info(f'found {submission.fullname}: {submission.title}')
-            if submission.fullname in BAD_LINKS:
+            if submission.fullname in FOLLOWED_THIS_SESSION:
                 self.logger.info('post already attempted this session')
                 continue
             if self.already_replied_to(submission.fullname):
@@ -51,7 +51,7 @@ class Bot:
             site_name, site_func = self.get_site_func(submission.url)
             if site_func:
                 self.logger.info('gathering data...')
-                BAD_LINKS.append(submission.fullname)
+                FOLLOWED_THIS_SESSION.append(submission.fullname)
                 post, markdown = site_func(submission)
                 self.submit_reply(submission, markdown)
                 self.log_reply(post)
@@ -149,10 +149,11 @@ def main(sub_to_stream: str):
         try:
             bot.run()
         except Exception as e:
+            wait_time = wait_seconds * attempts * 2
             wrapper_logger.critical(e)
-            wrapper_logger.critical(f'restarting in {wait_seconds} seconds')
+            wrapper_logger.critical(f'restarting in {wait_time} seconds')
+            time.sleep(wait_time)
             attempts += 1
-            time.sleep(wait_seconds * attempts * 2)
 
 
 if __name__ == '__main__':
