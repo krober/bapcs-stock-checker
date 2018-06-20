@@ -7,14 +7,14 @@ Concept inspired by [MCStockCheckerBot](https://github.com/darakelian/MCStockChe
 
 # Language  
 Python  
++ requires 3.6+ (f-strings)
 
 # Libraries  
 PRAW  
 Requests  
 SQLAlchemly  
 PyMySQL  
-
-\+ addl dependencies, all included in requirements.txt  
++ addl dependencies, all included in requirements.txt  
 
 # Requirements  
 
