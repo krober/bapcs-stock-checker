@@ -64,3 +64,4 @@ modules.xml
 /src/praw.ini
 /src/database/db.ini
 /src/logfile.log
+/src/log-archive
