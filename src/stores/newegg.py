@@ -1,8 +1,13 @@
+import logging
 import datetime
 import re
 import requests
 
 from models.post import Post
+from logger import logger
+
+
+newegg_logger = logger.get_logger('Wrapper', '../logfile.log', logging.INFO)
 
 
 def get_html(url: str):
@@ -28,10 +33,10 @@ def get_mpn(html: str):
     try:
         mpn = re.search(pattern, html).group(0)
     except AttributeError as e:
-        # TODO add to log
+        newegg_logger.error(f'get_mpn: AttributeError: {e}')
         return None
     except Exception as e:
-        # TODO add to log
+        newegg_logger.error(f'get_mpn: Exception: {e}')
         return None
     else:
         return mpn
@@ -48,16 +53,16 @@ def get_price(html: str):
     try:
         price = re.search(pattern, html).group(0)
     except AttributeError as e:
-        # TODO add to log
+        newegg_logger.error(f'get_price: AttributeError: {e}')
         return None
     except Exception as e:
-        # TODO add to log
+        newegg_logger.error(f'get_price: Exception: {e}')
         return None
 
     try:
         int(round(float(price)))
     except Exception as e:
-        # TODO add to log, likely discontinued product 'discontinued'
+        newegg_logger.error(f'get_price: Exception: TypeCast: {e}')
         return None
 
     return int(round(float(price)))
