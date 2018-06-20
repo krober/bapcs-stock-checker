@@ -1,6 +1,10 @@
+import datetime
 import json
 import re
 import requests
+
+from formatters import formatters
+from models.post import Post
 
 
 def get_html(url: str, store_num: str='095'):
@@ -86,19 +90,29 @@ def get_metadata(html: str):
     return metadata
 
 
-def mc_run(url: str):
+def mc_run(submission):
     """
-    Given a url, parse and return inventories by location and product metadata
-    :param url: str, url to MC product
-    :return: list of tuples of inventories by location; dict of metadata
+    Given a submission, return a Post object and appropriate markdown
+    :param submission: praw.Reddit.submission
+    :return: a Post object and appropriate markdown
     """
+    url = submission.url
+
     html = get_html(url)
     metadata = get_metadata(html)
 
     stores = get_stores(html)
     inventories = get_inventories(url, stores)
 
-    return inventories, metadata
+    post = Post(submission.fullname,
+                metadata.get('mpn'),
+                metadata.get('price'),
+                datetime.date.today(),
+                'microcenter.com')
+
+    markdown = formatters.build_markdown(inventories, metadata)
+
+    return post, markdown
 
 
 def main():
