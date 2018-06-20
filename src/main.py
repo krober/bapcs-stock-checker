@@ -44,17 +44,18 @@ class Bot:
             self.logger.info(f'found {submission.fullname}: {submission.title}')
             if submission.fullname in BAD_LINKS:
                 self.logger.info('post already attempted this session')
+                continue
             if self.already_replied_to(submission.fullname):
                 self.logger.info('post already replied to')
                 continue
             site_name, site_func = self.get_site_func(submission.url)
             if site_func:
                 self.logger.info('gathering data...')
+                BAD_LINKS.append(submission.fullname)
                 post, markdown = site_func(submission)
                 self.submit_reply(submission, markdown)
                 self.log_reply(post)
                 time.sleep(10)
-            BAD_LINKS.append(submission.fullname)
             self.logger.info('waiting for next submission...')
 
     def get_site_func(self, url: str):
