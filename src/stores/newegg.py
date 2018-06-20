@@ -44,6 +44,7 @@ def get_price(html: str):
     :return: int, price, rounded
     """
     pattern = "(?<=product_sale_price:\[\\')(.*)(?=\\'\])"
+
     try:
         price = re.search(pattern, html).group(0)
     except AttributeError as e:
@@ -52,8 +53,14 @@ def get_price(html: str):
     except Exception as e:
         # TODO add to log
         return None
-    else:
-        return int(round(float(price)))
+
+    try:
+        int(round(float(price)))
+    except Exception as e:
+        # TODO add to log, likely discontinued product 'discontinued'
+        return None
+
+    return int(round(float(price)))
 
 
 def ne_run(submission):
