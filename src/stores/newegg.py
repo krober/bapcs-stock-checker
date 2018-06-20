@@ -7,7 +7,7 @@ from models.post import Post
 from logger import logger
 
 
-newegg_logger = logger.get_logger('Wrapper', '../logfile.log', logging.INFO)
+newegg_logger = logger.get_logger('Newegg', '../logfile.log', logging.INFO)
 
 
 def get_html(url: str):
@@ -30,13 +30,13 @@ def get_mpn(html: str):
     :return: str, mpn
     """
     pattern = "(?<=product_model:\[\\')(.*)(?=\\'\])"
+    data = re.search(pattern, html)
+
     try:
-        mpn = re.search(pattern, html).group(0)
+        mpn = data.group(0)
     except AttributeError as e:
         newegg_logger.error(f'get_mpn: AttributeError: {e}')
-        return None
-    except Exception as e:
-        newegg_logger.error(f'get_mpn: Exception: {e}')
+        newegg_logger.error(f'data: {data}')
         return None
     else:
         return mpn
@@ -49,23 +49,23 @@ def get_price(html: str):
     :return: int, price, rounded
     """
     pattern = "(?<=product_sale_price:\[\\')(.*)(?=\\'\])"
+    data = re.search(pattern, html)
 
     try:
-        price = re.search(pattern, html).group(0)
+        price = data.group(0)
     except AttributeError as e:
         newegg_logger.error(f'get_price: AttributeError: {e}')
-        return None
-    except Exception as e:
-        newegg_logger.error(f'get_price: Exception: {e}')
+        newegg_logger.error(f'data: {data}')
         return None
 
     try:
-        int(round(float(price)))
-    except Exception as e:
-        newegg_logger.error(f'get_price: Exception: TypeCast: {e}')
+        price = int(round(float(price)))
+    except ValueError as e:
+        newegg_logger.error(f'get_price: ValueError: {e}')
+        newegg_logger.error(f'price: {price}')
         return None
 
-    return int(round(float(price)))
+    return price
 
 
 def ne_run(submission):
