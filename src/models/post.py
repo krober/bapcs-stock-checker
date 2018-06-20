@@ -21,7 +21,8 @@ class Post(Base):
                  mpn: str,
                  price: int,
                  date: datetime.date,
-                 site: str):
+                 site: str,
+                 ):
         self.reddit_fullname = reddit_fullname
         self.mpn = mpn
         self.price = price

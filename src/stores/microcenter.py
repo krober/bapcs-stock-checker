@@ -109,7 +109,8 @@ def mc_run(submission):
                 metadata.get('mpn'),
                 metadata.get('price'),
                 datetime.date.today(),
-                'microcenter.com')
+                'microcenter.com',
+                )
 
     markdown = formatters.build_markdown(inventories, metadata)
 
