@@ -56,3 +56,7 @@ class Post(Base):
         return f'Post ({self.date} - {self.reddit_fullname}, {self.mpn})'
 
 
+if __name__ == '__main__':
+    pass
+
+
