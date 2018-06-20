@@ -25,8 +25,16 @@ def get_mpn(html: str):
     :return: str, mpn
     """
     pattern = "(?<=product_model:\[\\')(.*)(?=\\'\])"
-    mpn = re.search(pattern, html).group(0)
-    return mpn
+    try:
+        mpn = re.search(pattern, html).group(0)
+    except AttributeError as e:
+        # TODO add to log
+        return None
+    except Exception as e:
+        # TODO add to log
+        return None
+    else:
+        return mpn
 
 
 def get_price(html: str):
@@ -36,8 +44,16 @@ def get_price(html: str):
     :return: int, price, rounded
     """
     pattern = "(?<=product_sale_price:\[\\')(.*)(?=\\'\])"
-    price = re.search(pattern, html).group(0)
-    return int(round(float(price)))
+    try:
+        price = re.search(pattern, html).group(0)
+    except AttributeError as e:
+        # TODO add to log
+        return None
+    except Exception as e:
+        # TODO add to log
+        return None
+    else:
+        return int(round(float(price)))
 
 
 def ne_run(submission):
@@ -54,14 +70,17 @@ def ne_run(submission):
     mpn = get_mpn(html)
     price = get_price(html)
 
-    post = Post(submission.fullname,
-                mpn,
-                price,
-                datetime.date.today(),
-                'newegg.com',
-                )
+    if mpn is None or price is None:
+        return None, None
+    else:
+        post = Post(submission.fullname,
+                    mpn,
+                    price,
+                    datetime.date.today(),
+                    'newegg.com',
+                    )
 
-    return post, None
+        return post, None
 
 
 def main():
