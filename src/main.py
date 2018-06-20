@@ -33,8 +33,8 @@ class Bot:
     def run(self):
         self.logger.info('streaming...')
         for submission in self.subreddit.stream.submissions():
-            self.logger.info(f'found {submission.id}: {submission.title}')
-            if self.already_replied_to(submission.id):
+            self.logger.info(f'found {submission.fullname}: {submission.title}')
+            if self.already_replied_to(submission.fullname):
                 self.logger.info('post already replied to')
                 continue
             url = submission.url
@@ -55,9 +55,9 @@ class Bot:
         self.logger.warning('No function mapped to this url')
         return None, None
 
-    def already_replied_to(self, submission_id: str):
+    def already_replied_to(self, submission_fullname: str):
         with session_scope(SessionMode.READ) as session:
-            return session.query(exists().where(Post.reddit_id==submission_id)).scalar()
+            return session.query(exists().where(Post.reddit_fullname==submission_fullname)).scalar()
 
     def submit_reply(self, submission, markdown: str):
         self.logger.info('attempting reply...')
@@ -72,7 +72,7 @@ class Bot:
             self.logger.info('replied')
 
     def log_reply(self, submission, metadata: dict, site_name: str):
-        post = Post(submission.id,
+        post = Post(submission.fullname,
                     metadata.get('mpn'),
                     metadata.get('price'),
                     datetime.date.today(),

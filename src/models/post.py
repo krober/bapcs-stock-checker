@@ -10,19 +10,19 @@ class Post(Base):
     __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)
-    reddit_id = Column(String(6))
+    reddit_fullname = Column(String(15))
     mpn = Column(String(30))
     price = Column(Integer)
     date = Column(Date)
     site = Column(String(50))
 
     def __init__(self,
-                 reddit_id: str,
+                 reddit_fullname: str,
                  mpn: str,
                  price: int,
                  date: datetime.date,
                  site: str):
-        self.reddit_id = reddit_id
+        self.reddit_fullname = reddit_fullname
         self.mpn = mpn
         self.price = price
         self.date = date
@@ -43,6 +43,6 @@ class Post(Base):
         return value
 
     def __repr__(self):
-        return f'Post ({self.date} - {self.reddit_id}, {self.mpn})'
+        return f'Post ({self.date} - {self.reddit_fullname}, {self.mpn})'
 
 
