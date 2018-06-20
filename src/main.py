@@ -11,7 +11,7 @@ from sqlalchemy import exists
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from logger import logger
-from stores import microcenter
+from stores import microcenter, newegg
 from models.post import Post
 from database.sql_base import SessionMode, session_scope
 
@@ -24,7 +24,8 @@ class Bot:
     :attr site_functions: dictionary that maps domain to its corresponding function in /stores
     """
     site_functions = {
-        'microcenter.com': microcenter.mc_run
+        'microcenter.com': microcenter.mc_run,
+        'newegg.com': newegg.ne_run,
     }
 
     def __init__(self, sub_to_stream: str):
