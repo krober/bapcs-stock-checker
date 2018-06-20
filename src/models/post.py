@@ -7,6 +7,15 @@ from database.sql_base import Base
 
 
 class Post(Base):
+    """
+    Represents a reddit post with additional data
+    :attr id: Integer, generated sql pk
+    :attr reddit_fullname: str, reddit type identifier 't3_' + submission id ex. 'a4hafgh'
+    :attr mpn: str, manufacturer part number for linked product
+    :attr price: int, rounded price of product at date of instantiation
+    :attr date: Date, date of instantiation
+    :attr site: str, domain of linked product ex 'microcenter.com'
+    """
     __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)

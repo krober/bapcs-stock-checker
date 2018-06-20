@@ -17,7 +17,12 @@ from database.sql_base import SessionMode, session_scope
 
 
 class Bot:
-    site_funcs = {
+    """
+    Bot that will initialize on given subreddit,
+    and scan for products to search/parse for information
+    :attr site_functions: dictionary that maps domain to its corresponding function in /stores
+    """
+    site_functions = {
         'microcenter.com': microcenter.mc_run
     }
 
@@ -44,7 +49,12 @@ class Bot:
             self.logger.info('waiting for next submission...')
 
     def get_site_func(self, url: str):
-        for site, func in self.site_funcs.items():
+        """
+        Looks for function in site_functions corresponding to url
+        :param url: str, link to check for site pattern
+        :return: tuple, name of site found and function to call to parse; None, None if not found
+        """
+        for site, func in self.site_functions.items():
             if site in url:
                 self.logger.info(f'found {site}')
                 return site, func
@@ -52,10 +62,21 @@ class Bot:
         return None, None
 
     def already_replied_to(self, submission_fullname: str):
+        """
+        Checks db for submission_fullname against reddit_fullname
+        :param submission_fullname: str, praw.Reddit.submission.fullname
+        :return: bool, true if found in db, else false
+        """
         with session_scope(SessionMode.READ) as session:
             return session.query(exists().where(Post.reddit_fullname==submission_fullname)).scalar()
 
     def submit_reply(self, submission: praw.Reddit.submission, markdown: str):
+        """
+        Attempts to post comment to reddit submission; sleeps if ratelimit enforced by reddit
+        :param submission: praw.Reddit.submission, submission to reply to
+        :param markdown: str, formatted markdown for reddit
+        :return: nothing
+        """
         self.logger.info('attempting reply...')
         try:
             submission.reply(markdown)
@@ -68,11 +89,21 @@ class Bot:
             self.logger.info('replied')
 
     def log_reply(self, post: Post):
+        """
+        Writes Post model to db
+        :param post: Post, Post instance to write
+        :return: nothing
+        """
         with session_scope(SessionMode.WRITE) as session:
             session.add(post)
         self.logger.info('written to db')
 
     def get_wait_time(self, message: str):
+        """
+        Determines time to sleep based on reddit ratelimit
+        :param message: str, error string from reddit ratelimit exception
+        :return: int, minutes to wait til ratelimit lifted
+        """
         if 'seconds' in message:
             wait_mins = 1
         else:
@@ -82,6 +113,14 @@ class Bot:
 
 
 def main(sub_to_stream: str):
+    """
+    Starts bot on sub_to_stream, attempts to handle exceptions and restart bot
+    :param sub_to_stream: str, subreddit name ex 'buildapcsales'
+    :return: nothing
+    :attr wait_seconds: time to wait on 'unhandled' exception before restart attempt
+    :attr max_uncaught: number of 'unhandled' to catch before exiting
+    :attr attempts: starts at 1 to start at first attempt, increases after 'unhandled'
+    """
     wrapper_logger = logger.get_logger('Wrapper', './logfile.log', logging.INFO)
     wait_seconds = 90
     max_uncaught = 10

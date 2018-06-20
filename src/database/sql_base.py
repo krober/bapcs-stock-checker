@@ -8,6 +8,11 @@ from sqlalchemy.orm import sessionmaker
 
 
 def load_engine(config_path: str):
+    """
+    Create a sql connection based on config from defined ini file
+    :param config_path: str, path to ini file
+    :return: slqalchemy engine
+    """
     config = configparser.ConfigParser()
     config.read(config_path)
 
@@ -31,6 +36,7 @@ Base = declarative_base()
 
 
 class SessionMode(Enum):
+    """Enum for use with session_scope to enable/disable .commit() to db"""
     READ = auto()
     WRITE = auto()
 
