@@ -1,4 +1,3 @@
-import datetime
 import logging
 import os.path
 import sys
@@ -11,7 +10,6 @@ from sqlalchemy import exists
 # fixes sys.argv launching ModuleNotFoundError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from formatters import formatters
 from logger import logger
 from stores import microcenter
 from models.post import Post
@@ -41,10 +39,9 @@ class Bot:
             site_name, site_func = self.get_func(url)
             if site_func:
                 self.logger.info('gathering data...')
-                inventories, metadata = site_func(url)
-                markdown = formatters.build_markdown(inventories, metadata)
+                post, markdown = site_func(submission)
                 self.submit_reply(submission, markdown)
-                self.log_reply(submission, metadata, site_name)
+                self.log_reply(post)
             self.logger.info('waiting for next submission...')
 
     def get_func(self, url: str):
@@ -71,12 +68,7 @@ class Bot:
         else:
             self.logger.info('replied')
 
-    def log_reply(self, submission, metadata: dict, site_name: str):
-        post = Post(submission.fullname,
-                    metadata.get('mpn'),
-                    metadata.get('price'),
-                    datetime.date.today(),
-                    site_name)
+    def log_reply(self, post: Post):
         with session_scope(SessionMode.WRITE) as session:
             session.add(post)
         self.logger.info('written to db')
