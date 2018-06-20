@@ -77,17 +77,14 @@ def ne_run(submission):
     mpn = get_mpn(html)
     price = get_price(html)
 
-    if mpn is None or price is None:
-        return None, None
-    else:
-        post = Post(submission.fullname,
-                    mpn,
-                    price,
-                    datetime.date.today(),
-                    'newegg.com',
-                    )
+    post = Post(submission.fullname,
+                mpn,
+                price,
+                datetime.date.today(),
+                'newegg.com',
+                )
 
-        return post, None
+    return post, None
 
 
 def main():

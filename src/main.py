@@ -49,6 +49,7 @@ class Bot:
                 self.submit_reply(submission, markdown)
                 self.log_reply(post)
             self.logger.info('waiting for next submission...')
+            time.sleep(10)
 
     def get_site_func(self, url: str):
         """
