@@ -67,7 +67,7 @@ class Bot:
             if site in url:
                 self.logger.info(f'found {site}')
                 return site, func
-        self.logger.warning('No function mapped to this url')
+        self.logger.warning(f'No function mapped to {url[:url.find(".com")+4]}')
         return None, None
 
     def already_replied_to(self, submission_fullname: str):
