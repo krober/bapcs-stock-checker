@@ -20,6 +20,7 @@ class Bot:
     """
     Bot that will initialize on given subreddit,
     and scan for products to search/parse for information
+    Depending on site function configuration, will post comments to submissions
     :attr site_functions: dictionary that maps domain to its corresponding function in /stores
     """
     site_functions = {
