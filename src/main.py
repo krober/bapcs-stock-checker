@@ -133,7 +133,7 @@ def main(sub_to_stream: str):
     :attr attempts: starts at 1 to start at first attempt, increases after 'unhandled'
     """
     wrapper_logger = logger.get_logger('Wrapper', './logfile.log', logging.INFO)
-    wait_seconds = 90
+    wait_seconds = 60
     max_uncaught = 10
     attempts = 1
     bot = Bot(sub_to_stream)
@@ -145,7 +145,7 @@ def main(sub_to_stream: str):
             wrapper_logger.critical(e)
             wrapper_logger.critical(f'restarting in {wait_seconds} seconds')
             attempts += 1
-            time.sleep(wait_seconds)
+            time.sleep(wait_seconds * attempts * 2)
 
 
 if __name__ == '__main__':
