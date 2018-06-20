@@ -77,16 +77,20 @@ class Bot:
         :param markdown: str, formatted markdown for reddit
         :return: nothing
         """
-        self.logger.info('attempting reply...')
-        try:
-            submission.reply(markdown)
-        except praw.exceptions.APIException as e:
-            self.logger.error(e.message)
-            if e.error_type == 'RATELIMIT':
-                time.sleep(self.get_wait_time(e.message) * 60)
-                self.submit_reply(submission, markdown)
+        if markdown is None:
+            self.logger.debug('skipping reply, markdown is None')
+            return
         else:
-            self.logger.info('replied')
+            self.logger.info('attempting reply...')
+            try:
+                submission.reply(markdown)
+            except praw.exceptions.APIException as e:
+                self.logger.error(e.message)
+                if e.error_type == 'RATELIMIT':
+                    time.sleep(self.get_wait_time(e.message) * 60)
+                    self.submit_reply(submission, markdown)
+            else:
+                self.logger.info('replied')
 
     def log_reply(self, post: Post):
         """
@@ -94,9 +98,13 @@ class Bot:
         :param post: Post, Post instance to write
         :return: nothing
         """
-        with session_scope(SessionMode.WRITE) as session:
-            session.add(post)
-        self.logger.info('written to db')
+        if post is None:
+            self.logger.debug('skipping write to db, post is None')
+            return
+        else:
+            with session_scope(SessionMode.WRITE) as session:
+                session.add(post)
+            self.logger.info('written to db')
 
     def get_wait_time(self, message: str):
         """
