@@ -16,6 +16,9 @@ from models.post import Post
 from database.sql_base import SessionMode, session_scope
 
 
+BAD_LINKS = []
+
+
 class Bot:
     """
     Bot that will initialize on given subreddit,
@@ -39,6 +42,8 @@ class Bot:
         self.logger.info('streaming...')
         for submission in self.subreddit.stream.submissions():
             self.logger.info(f'found {submission.fullname}: {submission.title}')
+            if submission.fullname in BAD_LINKS:
+                self.logger.info('post already attempted this session')
             if self.already_replied_to(submission.fullname):
                 self.logger.info('post already replied to')
                 continue
@@ -49,6 +54,7 @@ class Bot:
                 self.submit_reply(submission, markdown)
                 self.log_reply(post)
                 time.sleep(10)
+            BAD_LINKS.append(submission.fullname)
             self.logger.info('waiting for next submission...')
 
     def get_site_func(self, url: str):
