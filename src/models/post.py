@@ -19,7 +19,7 @@ class Post(Base):
     __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)
-    reddit_fullname = Column(String(15))
+    reddit_fullname = Column(String(15), nullable=False, unique=True)
     mpn = Column(String(30))
     price = Column(Integer)
     date = Column(Date)
