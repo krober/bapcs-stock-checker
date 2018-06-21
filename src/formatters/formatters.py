@@ -1,8 +1,9 @@
-def build_markdown(inventories: list, metadata: dict):
+def build_markdown(inventories: list, metadata: dict, url: str):
     """
     given locations(location, inventory) and metadata, return reddit-structured markdown
     :param inventories: list of tuples, (location, inventory)
     :param metadata: dict, should include mpn and price at minimum, optionally store_only
+    :param url: str, base url to mc product
     :return: str, markdown formatted
     """
     search_sites = {
@@ -17,7 +18,7 @@ def build_markdown(inventories: list, metadata: dict):
     }
 
     meta_section = get_meta_section(metadata)
-    inv_section = get_inv_section(inventories) if inventories else 'No inventory found'
+    inv_section = get_inv_section(inventories, url) if inventories else 'No inventory found'
     search_links = '|'.join([f'[{site}]({search_sites.get(site)}{metadata.get("mpn")})' for site in search_sites])
     admin = 'Please PM for errors  \n[See on GitHub](https://github.com/krober/bapcs-stock-checker)'
 
@@ -45,10 +46,10 @@ def get_meta_section(metadata: dict):
     return meta_header + meta_format + meta_body
 
 
-def get_inv_section(inventories: list):
+def get_inv_section(inventories: list, url: str):
     inv_header = 'Location|Quantity\n'
     inv_format = ':-|-:\n'
-    inv_body = '\n'.join([f'{location}|{inventory}' for location, inventory in inventories])
+    inv_body = '\n'.join([f'[{name}]({url}?storeID={number})(|{inventory}' for name, number, inventory in inventories])
 
     return inv_header + inv_format + inv_body
 

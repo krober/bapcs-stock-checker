@@ -80,7 +80,7 @@ def get_inventories(url: str, stores: list):
             print(e)
         else:
             if inventory != 'Sold Out':
-                inventories.append(tuple((store_name, inventory)))
+                inventories.append(tuple((store_name, store_number, inventory)))
     inventories.sort(key=lambda store: store[0])
     return inventories
 
@@ -122,7 +122,7 @@ def mc_run(submission):
                 'microcenter.com',
                 )
 
-    markdown = formatters.build_markdown(inventories, metadata)
+    markdown = formatters.build_markdown(inventories, metadata, url)
 
     return post, markdown
 
