@@ -12,6 +12,10 @@ from models.post import Post
 mc_logger = logger.get_logger('Microcenter', '../logfile.log', logging.INFO)
 
 
+def strip_url(url: str):
+    return url[:url.find('?')]
+
+
 def get_html(url: str, store_num: str='095'):
     """
     Given a Microcenter URL, return raw HTML
@@ -103,7 +107,7 @@ def mc_run(submission):
     :param submission: praw.Reddit.submission
     :return: a Post object and appropriate markdown
     """
-    url = submission.url
+    url = strip_url(submission.url)
 
     html = get_html(url)
     metadata = get_metadata(html)
@@ -124,6 +128,20 @@ def mc_run(submission):
 
 
 def main():
+    """
+    url = 'http://www.microcenter.com/product/501644/HMD_Odyssey_Windows_Mixed_Reality_Headset?storeID=45&gclid=EAIaIQobChMIvrey9tzj2wIVkWV-Ch0eMAjQEAQYASABEgIjL_D_BwE'
+    url = strip_url(url)
+
+    html = get_html(url)
+    metadata = get_metadata(html)
+
+    stores = get_stores(html)
+    inventories = get_inventories(url, stores)
+
+    markdown = formatters.build_markdown(inventories, metadata, url)
+
+    print(markdown)
+    """
     pass
 
 
