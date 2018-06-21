@@ -49,7 +49,7 @@ def get_meta_section(metadata: dict):
 def get_inv_section(inventories: list, url: str):
     inv_header = 'Location|Quantity\n'
     inv_format = ':-|-:\n'
-    inv_body = '\n'.join([f'[{name}]({url}?storeID={number})(|{inventory}' for name, number, inventory in inventories])
+    inv_body = '\n'.join([f'[{name}]({url}?storeID={number})|{inventory}' for name, number, inventory in inventories])
 
     return inv_header + inv_format + inv_body
 
