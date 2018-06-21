@@ -14,13 +14,19 @@ def build_markdown(inventories: list, metadata: dict, url: str):
         'Amazon': 'https://www.amazon.com/s/keywords=',
         'Frys': 'https://www.frys.com/search?query_string=',
         'BestBuy': 'https://www.bestbuy.com/site/searchpage.jsp?st=',
-        'Newegg': 'https://www.newegg.com/Product/ProductList.aspx?Submit=ENE&DEPA=0&Description='
+        'Newegg': 'https://www.newegg.com/Product/ProductList.aspx?Submit=ENE&DEPA=0&Description=',
     }
 
     meta_section = get_meta_section(metadata)
     inv_section = get_inv_section(inventories, url) if inventories else 'No inventory found'
-    search_links = '|'.join([f'[{site}]({search_sites.get(site)}{metadata.get("mpn")})' for site in search_sites])
-    admin = 'Please PM for errors  \n[See on GitHub](https://github.com/krober/bapcs-stock-checker)'
+
+    search_links = []
+    for site in search_sites:
+        search_links.append(f'[{site}]({search_sites.get(site)}{metadata.get("mpn")})')
+    search_links = '|'.join(search_links)
+
+    admin = ('Please PM for errors  \n'
+             '[See on GitHub](https://github.com/krober/bapcs-stock-checker)')
 
     line_split = '  \n\n'
 
@@ -43,15 +49,23 @@ def get_meta_section(metadata: dict):
     meta_format = ':-|-:|:-:\n'
     meta_body = f'{mpn}|{price}|{store_only}'
 
-    return meta_header + meta_format + meta_body
+    return (meta_header
+            + meta_format
+            + meta_body)
 
 
 def get_inv_section(inventories: list, url: str):
     inv_header = 'Location|Quantity\n'
     inv_format = ':-|-:\n'
-    inv_body = '\n'.join([f'[{name}]({url}?storeID={number})|{inventory}' for name, number, inventory in inventories])
 
-    return inv_header + inv_format + inv_body
+    inv_body = []
+    for name, number, inventory in inventories:
+        inv_body.append(f'[{name}]({url}?storeID={number})|{inventory}')
+    inv_body = '\n'.join(inv_body)
+
+    return (inv_header
+            + inv_format
+            + inv_body)
 
 
 if __name__ == '__main__':

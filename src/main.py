@@ -47,25 +47,11 @@ class Bot:
             site_name, site_func = self.get_site_func(submission.url)
             if site_func:
                 self.logger.info('gathering data...')
-                FOLLOWED_THIS_SESSION.append(submission.fullname)
                 post, markdown = site_func(submission)
                 self.submit_reply(submission, markdown)
                 self.log_reply(post)
                 time.sleep(10)
             self.logger.info('waiting for next submission...')
-
-    def get_site_func(self, url: str):
-        """
-        Looks for function in site_functions corresponding to url
-        :param url: str, link to check for site pattern
-        :return: tuple, name of site found and function to call to parse; None, None if not found
-        """
-        for site, func in self.site_functions.items():
-            if site in url:
-                self.logger.info(f'found {site}')
-                return site, func
-        self.logger.warning(f'No function mapped to {url[:url.find(".com")+4]}')
-        return None, None
 
     def has_been_parsed(self, submission: praw.Reddit.submission):
         """
@@ -80,6 +66,7 @@ class Bot:
         elif self.already_replied_to(submission):
             self.logger.info('post already replied to')
             return True
+        FOLLOWED_THIS_SESSION.append(submission.fullname)
         return False
 
     def already_replied_to(self, submission: praw.Reddit.submission):
@@ -91,6 +78,19 @@ class Bot:
         with session_scope(SessionMode.READ) as session:
             return session.query(exists().where(Post.reddit_fullname==submission.fullname)).scalar()
 
+    def get_site_func(self, url: str):
+        """
+        Looks for function in site_functions corresponding to url
+        :param url: str, link to check for site pattern
+        :return: tuple, name of site found and function to call to parse; None, None if not found
+        """
+        for site, func in self.site_functions.items():
+            if site in url:
+                self.logger.info(f'found {site}')
+                return site, func
+        self.logger.warning(f'No function mapped to {url[:url.find(".com")+4]}')
+        return None, None
+
     def submit_reply(self, submission: praw.Reddit.submission, markdown: str):
         """
         Attempts to post comment to reddit submission; sleeps if ratelimit enforced by reddit
@@ -98,20 +98,19 @@ class Bot:
         :param markdown: str, formatted markdown for reddit
         :return: nothing
         """
-        if markdown is None:
-            self.logger.debug('skipping reply, markdown is None')
-            return
-        else:
+        if markdown:
             self.logger.info('attempting reply...')
             try:
                 submission.reply(markdown)
             except praw.exceptions.APIException as e:
                 self.logger.error(e.message)
                 if e.error_type == 'RATELIMIT':
-                    time.sleep(self.get_wait_time(e.message) * 60)
+                    time.sleep(self.get_wait_mins(e.message) * 60)
                     self.submit_reply(submission, markdown)
             else:
                 self.logger.info('replied')
+
+        self.logger.debug('skipping reply, markdown is None')
 
     def log_reply(self, post: Post):
         """
@@ -127,7 +126,7 @@ class Bot:
                 session.add(post)
             self.logger.info('written to db')
 
-    def get_wait_time(self, message: str):
+    def get_wait_mins(self, message: str):
         """
         Determines time to sleep based on reddit ratelimit
         :param message: str, error string from reddit ratelimit exception

@@ -9,11 +9,19 @@ from logger import logger
 from models.post import Post
 
 
-mc_logger = logger.get_logger('Microcenter', '../logfile.log', logging.INFO)
+mc_logger = logger.get_logger('Microcenter', './logfile.log', logging.INFO)
 
 
 def strip_url(url: str):
-    return url[:url.find('?')]
+    """
+    Given a Microcenter URL, if query string is present, strip it and return
+    stripped string.  Titles of products should not contain '?'
+    :param url: str, microcenter url
+    :return: str, stripped of query string as necessary
+    """
+    url = url[:url.find('?')]
+    mc_logger.info(f'strip_url: url: {url}')
+    return url
 
 
 def get_html(url: str, store_num: str='095'):
@@ -31,7 +39,7 @@ def get_html(url: str, store_num: str='095'):
     return requests.get(url, headers=headers).text
 
 
-def extract_from_html(pattern: str, html: str):
+def extract_to_json(pattern: str, html: str):
     """
     Given raw Microcenter HTML and search pattern, find, format, and return matching python dictionary
     :param pattern: str, regex to search for in html
@@ -52,7 +60,7 @@ def get_stores(html: str):
     :return: list of tuples, store number, store name
     """
     pattern = "(?<=inventory = )(.*)"
-    store_list = extract_from_html(pattern, html)
+    store_list = extract_to_json(pattern, html)
     store_list = [(store['storeNumber'], store['storeName']) for store in store_list]
     return store_list
 
@@ -77,7 +85,6 @@ def get_inventories(url: str, stores: list):
         except AttributeError as e:
             # No inventoryCnt class found = only avail in store or sold out at location
             mc_logger.error(f'get_inventories: AttributeError: {e}')
-            print(e)
         else:
             if inventory != 'Sold Out':
                 inventories.append(tuple((store_name, store_number, inventory)))
@@ -92,10 +99,11 @@ def get_metadata(html: str):
     :return: dict, specified addl_product_attrs
     """
     pattern = "(?s)(?<=dataLayer = \[)(.*?)(?=\];)"
-    all_metadata = extract_from_html(pattern, html)
+    all_metadata = extract_to_json(pattern, html)
+    store_only_flag = 'Available for In-Store Pickup Only.'
     metadata = {
         'price': int(round(float(all_metadata['productPrice']))),
-        'store_only': 'Yes' if all_metadata['AvailabilityCode'] == 'Available for In-Store Pickup Only.' else 'No',
+        'store_only': 'Yes' if all_metadata['AvailabilityCode'] == store_only_flag else 'No',
         'mpn': all_metadata['mpn'],
     }
     return metadata

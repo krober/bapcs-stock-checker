@@ -7,7 +7,7 @@ from models.post import Post
 from logger import logger
 
 
-newegg_logger = logger.get_logger('Newegg', '../logfile.log', logging.INFO)
+newegg_logger = logger.get_logger('Newegg', './logfile.log', logging.INFO)
 
 
 def get_html(url: str):
