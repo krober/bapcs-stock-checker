@@ -85,7 +85,7 @@ def get_inventories(url: str, stores: list):
             inventory = data.group(0).strip()
         except AttributeError as e:
             # No inventoryCnt class found = only avail in store or sold out at location
-            mc_logger.error(f'AttributeError: {e}')
+            mc_logger.error(f'{e.__class__}: {e}')
         else:
             if inventory != 'Sold Out':
                 inventories.append(tuple((store_name, store_number, inventory)))
