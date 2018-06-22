@@ -14,7 +14,7 @@ def get_logger(name: str, file: str, level):
                                   f'-%(module)s'
                                   f'-%(lineno)s'
                                   f'-%(funcName)s'
-                                  f'-%(message).30s')
+                                  f'-%(message).50s')
 
     handler.setFormatter(formatter)
 

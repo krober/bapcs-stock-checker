@@ -87,7 +87,7 @@ class Bot:
             if site in url:
                 self.logger.info(f'found {site}')
                 return site, func
-        self.logger.warning(f'No function mapped to {url[:url.find(".com")+4]}')
+        self.logger.warning(f'No func mapped to {url[url.find("//")+2:url.find(".com")+4]}')
         return None, None
 
     def submit_reply(self, submission: praw.Reddit.submission, markdown: str):
