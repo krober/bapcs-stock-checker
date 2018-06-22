@@ -47,7 +47,7 @@ def get_price(html: str):
     """
     Given newegg html, return int price
     :param html: str, raw html
-    :return: int, price, rounded
+    :return: int, price, rounded; None if unable to cast
     """
     pattern = "(?<=product_sale_price:\[\\')(.*)(?=\\'\])"
     data = re.search(pattern, html)
@@ -78,7 +78,6 @@ def ne_run(submission):
     """
     # TODO: add markdown
     url = submission.url
-
     html = get_html(url)
 
     mpn = get_mpn(html)

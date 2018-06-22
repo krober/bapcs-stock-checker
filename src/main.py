@@ -78,7 +78,8 @@ class Bot:
         """
         Looks for function in site_functions corresponding to url
         :param url: str, link to check for site pattern
-        :return: tuple, name of site found and function to call to parse; None, None if not found
+        :return: tuple, name of site found and function to call to parse;
+        None, None if not found
         """
         for site, func in self.site_functions.items():
             if site in url:

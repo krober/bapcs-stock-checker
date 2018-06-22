@@ -43,7 +43,7 @@ class Post(Base):
         # TODO: add logging of values that violate max_len, likely a parsing error
         """
         For attributes in decorator, check against max value len, and truncate if needed
-        :param key: str, passed in from decorator
+        :param key: str, each str passed in from decorator
         :param value: str, passed in by sqlalchemy
         :return: str, the shorter of value and value[:30], further handled by sqlalchemy
         """
