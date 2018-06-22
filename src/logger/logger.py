@@ -9,9 +9,11 @@ def get_logger(name: str, file: str, level):
     handler.setLevel(level)
 
     formatter = logging.Formatter(f'%(asctime)s'
-                                  f'-%(name)s'
                                   f'-%(levelname)s'
-                                  f'-%(func)s'
+                                  f'-%(name)s'
+                                  f'-%(module)s'
+                                  f'-%(lineno)s'
+                                  f'-%(funcName)s'
                                   f'-%(message).30s')
 
     handler.setFormatter(formatter)
