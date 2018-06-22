@@ -47,7 +47,7 @@ class Bot:
                 self.logger.info('gathering data...')
                 post, markdown = site_func(submission)
                 self.submit_reply(submission, markdown)
-                self.log_reply(post)
+                self.save_data(post)
                 time.sleep(10)
             self.logger.info('waiting for next submission...')
 
@@ -111,7 +111,7 @@ class Bot:
 
         self.logger.debug('skipping reply, markdown is None')
 
-    def log_reply(self, post: Post):
+    def save_data(self, post: Post):
         """
         Writes Post model to db
         :param post: Post, Post instance to write
