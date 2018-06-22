@@ -5,7 +5,7 @@ import re
 import requests
 
 from stores.registration import register
-from formatters import formatters
+from templates import mc_template
 from logger import logger
 from models.post import Post
 
@@ -132,12 +132,13 @@ def mc_run(submission):
                 'microcenter.com',
                 )
 
-    markdown = formatters.build_markdown(inventories, metadata, url)
+    markdown = mc_template.build_markdown(inventories, metadata, url)
 
     return post, markdown
 
 
 def main():
+    pass
     """
     url = 'http://www.microcenter.com/product/501644/HMD_Odyssey_Windows_Mixed_Reality_Headset?storeID=45&gclid=EAIaIQobChMIvrey9tzj2wIVkWV-Ch0eMAjQEAQYASABEgIjL_D_BwE'
     url = strip_url(url)
@@ -148,11 +149,10 @@ def main():
     stores = get_stores(html)
     inventories = get_inventories(url, stores)
 
-    markdown = formatters.build_markdown(inventories, metadata, url)
+    markdown = mc_template.build_markdown(inventories, metadata, url)
 
     print(markdown)
     """
-    pass
 
 
 if __name__ == '__main__':
