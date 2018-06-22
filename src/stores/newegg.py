@@ -24,6 +24,24 @@ def get_html(url: str):
     return requests.get(url, headers=headers).text
 
 
+def extract_from_html(pattern: str, html: str):
+    """
+    Given newegg html, return item matching pattern
+    :param pattern: str, pattern to search against
+    :param html: str, html to search
+    :return: str, found data or None if not found/exception
+    """
+    data = re.search(pattern, html)
+    try:
+        data = data.group(0)
+    except AttributeError as e:
+        newegg_logger.error(f'extract: {pattern}: AttributeError: {e}')
+        newegg_logger.error(f'data: {data}')
+        return None
+    else:
+        return data
+
+
 def get_mpn(html: str):
     """
     Given newegg html, return mpn
@@ -31,16 +49,8 @@ def get_mpn(html: str):
     :return: str, mpn
     """
     pattern = "(?<=product_model:\[\\')(.*)(?=\\'\])"
-    data = re.search(pattern, html)
-
-    try:
-        mpn = data.group(0)
-    except AttributeError as e:
-        newegg_logger.error(f'get_mpn: AttributeError: {e}')
-        newegg_logger.error(f'data: {data}')
-        return None
-    else:
-        return mpn
+    mpn = extract_from_html(pattern, html)
+    return mpn
 
 
 def get_price(html: str):
@@ -50,23 +60,15 @@ def get_price(html: str):
     :return: int, price, rounded; None if unable to cast
     """
     pattern = "(?<=product_sale_price:\[\\')(.*)(?=\\'\])"
-    data = re.search(pattern, html)
-
+    price_text = extract_from_html(pattern, html)
     try:
-        price = data.group(0)
-    except AttributeError as e:
-        newegg_logger.error(f'get_price: AttributeError: {e}')
-        newegg_logger.error(f'data: {data}')
-        return None
-
-    try:
-        price = int(round(float(price)))
+        price = int(round(float(price_text)))
     except ValueError as e:
         newegg_logger.error(f'get_price: ValueError: {e}')
         newegg_logger.error(f'price: {price}')
         return None
-
-    return price
+    else:
+        return price
 
 
 @register('newegg.com')
