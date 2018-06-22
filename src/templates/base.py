@@ -16,7 +16,7 @@ def get_header(metadata: dict):
             + table_body)
 
 
-def get_footer(mpn: str):
+def get_search_links(mpn: str):
     search_sites = {
             'Google': 'https://www.google.com/search?q=',
             'PCPP': 'https://pcpartpicker.com/search/?q=',
@@ -37,10 +37,24 @@ def get_footer(mpn: str):
                             f')')
     search_links = '|'.join(search_links)
 
+    return search_links
+
+
+def get_admin():
     admin = ('Please PM for errors  \n'
              '[See on GitHub](https://github.com/krober/bapcs-stock-checker)')
 
-    return (search_links
-            + admin)
+    return admin
+
+
+def get_footer(mpn: str):
+    line_split = '  \n\n'
+
+    lines = [
+        get_search_links(mpn),
+        get_admin(),
+    ]
+
+    return line_split.join(lines)
 
 
