@@ -35,7 +35,7 @@ def extract_from_html(pattern: str, html: str):
     try:
         data = data.group(0)
     except AttributeError as e:
-        newegg_logger.error(f'extract: {pattern}: AttributeError: {e}')
+        newegg_logger.error(f'{pattern}: AttributeError: {e}')
         newegg_logger.error(f'data: {data}')
         return None
     else:
@@ -64,7 +64,7 @@ def get_price(html: str):
     try:
         price = int(round(float(price_text)))
     except ValueError as e:
-        newegg_logger.error(f'get_price: ValueError: {e}')
+        newegg_logger.error(f'ValueError: {e}')
         newegg_logger.error(f'price: {price}')
         return None
     else:

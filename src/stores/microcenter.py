@@ -21,7 +21,7 @@ def strip_url(url: str):
     :return: str, stripped of query string as necessary
     """
     url = url[:url.find('?')]
-    mc_logger.info(f'strip_url: url: {url}')
+    mc_logger.info(f'url: {url}')
     return url
 
 
@@ -85,7 +85,7 @@ def get_inventories(url: str, stores: list):
             inventory = data.group(0).strip()
         except AttributeError as e:
             # No inventoryCnt class found = only avail in store or sold out at location
-            mc_logger.error(f'get_inventories: AttributeError: {e}')
+            mc_logger.error(f'AttributeError: {e}')
         else:
             if inventory != 'Sold Out':
                 inventories.append(tuple((store_name, store_number, inventory)))

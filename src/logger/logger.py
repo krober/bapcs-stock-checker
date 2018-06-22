@@ -8,13 +8,16 @@ def get_logger(name: str, file: str, level):
     handler = logging.FileHandler(file)
     handler.setLevel(level)
 
-    formatter = logging.Formatter('%(asctime)s-%(name)s-%(levelname)s-%(message)s')
+    formatter = logging.Formatter(f'%(asctime)s'
+                                  f'-%(name)s'
+                                  f'-%(levelname)s'
+                                  f'-%(func)s'
+                                  f'-%(message).30s')
 
     handler.setFormatter(formatter)
 
     logger.addHandler(handler)
 
     return logger
-
 
 
