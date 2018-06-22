@@ -13,6 +13,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from logger import logger
 from models.post import Post
 from database.sql_base import SessionMode, session_scope
+from stores import registration
 
 
 FOLLOWED_THIS_SESSION = []
@@ -25,7 +26,7 @@ class Bot:
     Depending on site function configuration, will post comments to submissions
     :attr site_functions: dictionary that maps domain to its corresponding function in /stores
     """
-    site_functions = {}
+    site_functions = registration.site_functions
 
     def __init__(self, sub_to_stream: str):
         self.logger = logger.get_logger('Bot', './logfile.log', logging.DEBUG)
@@ -35,6 +36,7 @@ class Bot:
         self.logger.info('initialized')
 
     def run(self):
+        load_stores()
         self.logger.info('streaming...')
         for submission in self.subreddit.stream.submissions():
             self.logger.info(f'found {submission.fullname}: {submission.title}')
@@ -166,7 +168,6 @@ def main(sub_to_stream: str):
     wait_seconds = 60
     max_uncaught = 10
     attempts = 1
-    load_stores()
     bot = Bot(sub_to_stream)
     while attempts <= max_uncaught:
         wrapper_logger.info(f'starting attempt {attempts}...')

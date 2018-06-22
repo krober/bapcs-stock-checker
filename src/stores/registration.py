@@ -1,9 +1,9 @@
-from main import Bot
+site_functions = {}
 
 
 def register(site_name: str):
     """
-    Registers decorated functions in the Bot.site_functions dictionary.
+    Registers decorated functions in the .site_functions dictionary.
     Therefore, store site functions decorated with @register can be easily
     'disabled' by commenting the decorator, and new stores can be added simply
     by including the decorator without modification to other files.
@@ -12,11 +12,11 @@ def register(site_name: str):
     """
     def register_site_func(site_function):
         """
-        Adds site_name: site_function to Bot's dictionary
+        Adds site_name: site_function to .site_functions dictionary
         :param site_function: function, decorated function that is to be registered
         :return: function, unchanged original function
         """
-        Bot.site_functions[site_name] = site_function
+        site_functions[site_name] = site_function
         return site_function
     return register_site_func
 
