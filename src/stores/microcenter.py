@@ -4,6 +4,7 @@ import json
 import re
 import requests
 
+from stores.registration import register
 from formatters import formatters
 from logger import logger
 from models.post import Post
@@ -109,6 +110,7 @@ def get_metadata(html: str):
     return metadata
 
 
+@register('microcenter.com')
 def mc_run(submission):
     """
     Given a submission, return a Post object and appropriate markdown

@@ -3,8 +3,9 @@ import datetime
 import re
 import requests
 
-from models.post import Post
+from stores.registration import register
 from logger import logger
+from models.post import Post
 
 
 newegg_logger = logger.get_logger('Newegg', './logfile.log', logging.INFO)
@@ -68,6 +69,7 @@ def get_price(html: str):
     return price
 
 
+@register('newegg.com')
 def ne_run(submission):
     """
     Given a submission, return a Post object

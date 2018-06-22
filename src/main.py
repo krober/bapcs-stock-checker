@@ -1,5 +1,5 @@
 import logging
-import os.path
+import os
 import sys
 import time
 
@@ -11,7 +11,6 @@ from sqlalchemy import exists
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from logger import logger
-from stores import microcenter, newegg
 from models.post import Post
 from database.sql_base import SessionMode, session_scope
 
@@ -26,10 +25,7 @@ class Bot:
     Depending on site function configuration, will post comments to submissions
     :attr site_functions: dictionary that maps domain to its corresponding function in /stores
     """
-    site_functions = {
-        'microcenter.com': microcenter.mc_run,
-        'newegg.com': newegg.ne_run,
-    }
+    site_functions = {}
 
     def __init__(self, sub_to_stream: str):
         self.logger = logger.get_logger('Bot', './logfile.log', logging.DEBUG)
@@ -140,6 +136,22 @@ class Bot:
         return wait_mins
 
 
+def load_stores():
+    """
+    Iterates though /stores and imports all modules.  This process includes
+    registration of store site functions decorated with @register.
+    See /stores/registration.py for details on store registration.
+    :return: nothing
+    """
+    path = './stores'
+    sys.path.insert(0, path)
+    for f in os.listdir(path):
+        fname, ext = os.path.splitext(f)
+        if ext == '.py':
+            __import__(fname)
+    sys.path.pop(0)
+
+
 def main(sub_to_stream: str):
     """
     Starts bot on sub_to_stream, attempts to handle exceptions and restart bot
@@ -153,6 +165,7 @@ def main(sub_to_stream: str):
     wait_seconds = 60
     max_uncaught = 10
     attempts = 1
+    load_stores()
     bot = Bot(sub_to_stream)
     while attempts <= max_uncaught:
         wrapper_logger.info(f'starting attempt {attempts}...')
