@@ -65,11 +65,11 @@ def get_price(html: str):
         price = int(round(float(price_text)))
     except ValueError as e:
         newegg_logger.error(f'{e.__class__}: {e}')
-        newegg_logger.error(f'price: {price}')
+        newegg_logger.error(f'price_text: {price_text}')
         return None
     except TypeError as e:
         newegg_logger.error(f'{e.__class__}: {e}')
-        newegg_logger.error(f'price: {price}')
+        newegg_logger.error(f'price_text: {price_text}')
         return None
     else:
         return price
