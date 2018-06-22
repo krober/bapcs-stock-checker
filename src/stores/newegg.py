@@ -70,6 +70,7 @@ def get_price(html: str):
     except TypeError as e:
         newegg_logger.error(f'{e.__class__}: {e}')
         newegg_logger.error(f'price: {price}')
+        return None
     else:
         return price
 
