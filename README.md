@@ -1,5 +1,5 @@
 # BAPCS Stock/Price checker bot  
-Listens to reddit.com/r/buildapcsales for posts, and replies with price, part number, and inventory counts  
+Listens to reddit.com/r/buildapcsales (by default, can be changed to any sub) for posts, and replies with price, part number, and inventory counts  
 Can be expanded with additional sites under /src/stores, provided they return the correct info to main  
 Also, logs prices to db for possible price history analysis, but can be reconfigured to use text or csv for simplicity.  If reconfigured, should log reddit post IDs replied to at minimum to avoid duplicate comments
 
@@ -28,7 +28,7 @@ PyMySQL
 #### File Requirements  
 (examples found in /examples)  
 
-+ praw.ini placed in /src/  
++ praw.ini placed in /src/reddit/  
 
     to configure:
     + go [here](https://www.reddit.com/prefs/apps/)
