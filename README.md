@@ -52,23 +52,18 @@ PyMySQL
     
 # Want to Add a Store/Site Parser?   
 
-+ Markdown for reply not needed (will still log to database)  
++ Markdown for reply not needed (just return None instead, will still log to database)  
 + Check out /examples/store_parser.py and existing store modules  
 + Must accept a praw.Reddit.submission
 + Must return 2 things:  
-    + A valid src.models.post.Post object, or (not preferred here) None
+    + A dictionary containing mpn and price, or None values for either/both
     + Valid markdown for reddit comment submission, or None
 + None values will be handled by the bot
     + Not all links work the same and network issues happen sometimes
     + Handles errors while allowing the bot to continue running
     + This is not a scientific application, though analyzing price data when enough has been collected will be interesting
-+ src.models.post.Post Object:
-    + reddit_fullname: praw.Reddit.submission.fullname, essentially given by Bot
-        + Essential. Even if mpn and price are null, initializing the Post object with a reddit_fullname will prevent the url from being handled again in the future by logging it to the database
-    + mpn: manufacturer part number, model number, or whatever nomenclature the site uses to refer to a unique product identifier
-    + price: product price, Integer, rounded
-    + date: datetime.date, use datetime.date.today()
-    + site: friendly domain for site you parsed, ie. newegg.com
+    + mpn: string, manufacturer part number, model number, or whatever nomenclature the site uses to refer to a unique product identifier, ideally similar across multiple stores if possible
+    + price: Integer, rounded, product price
 
     
 
