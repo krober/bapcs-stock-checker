@@ -3,6 +3,7 @@ import datetime
 from sqlalchemy import Column, Date, Integer, String
 from sqlalchemy.orm import validates
 
+from logger import logger
 from database.sql_base import Base
 
 
@@ -25,6 +26,8 @@ class Post(Base):
     date = Column(Date)
     site = Column(String(50))
 
+    post_logger = logger.get_logger('Post', './logfile.log')
+
     def __init__(self,
                  reddit_fullname: str,
                  mpn: str,
@@ -40,7 +43,6 @@ class Post(Base):
 
     @validates('mpn', 'site')
     def validate_lengths(self, key, value):
-        # TODO: add logging of values that violate max_len, likely a parsing error
         """
         For attributes in decorator, check against max value len, and truncate if needed
         :param key: str, each str passed in from decorator
@@ -49,6 +51,7 @@ class Post(Base):
         """
         max_len = getattr(self.__class__, key).prop.columns[0].type.length
         if value and len(value) > max_len:
+            self.post_logger.info(f'{key}: {value} - violated max length and was truncated')
             return value[:max_len]
         return value
 
