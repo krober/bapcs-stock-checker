@@ -12,6 +12,7 @@ from sqlalchemy import exists
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from logger import logger
+from database.base import SessionMode, session_scope
 from models.post import Post
 from database.sql_base import SessionMode, session_scope
 from stores import registration

@@ -4,7 +4,7 @@ from sqlalchemy import Column, Date, Integer, String
 from sqlalchemy.orm import validates
 
 from logger import logger
-from database.sql_base import Base
+from database.base import Base
 
 
 class Post(Base):
@@ -56,7 +56,7 @@ class Post(Base):
         return value
 
     def __repr__(self):
-        return f'Post ({self.date} - {self.reddit_fullname}, {self.mpn})'
+        return f'<Post ({self.date} - {self.reddit_fullname}, {self.mpn})>'
 
 
 if __name__ == '__main__':
