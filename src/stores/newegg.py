@@ -1,10 +1,8 @@
-import datetime
 import re
 import requests
 
 from stores.registration import register
 from logger import logger
-from models.post import Post
 
 
 newegg_logger = logger.get_logger('Newegg', './logfile.log')
@@ -90,14 +88,12 @@ def ne_run(submission):
     mpn = get_mpn(html)
     price = get_price(html)
 
-    post = Post(submission.fullname,
-                mpn,
-                price,
-                datetime.date.today(),
-                'newegg.com',
-                )
+    product_details = {
+        'mpn': mpn,
+        'price': price,
+    }
 
-    return post, None
+    return product_details, None
 
 
 def main():

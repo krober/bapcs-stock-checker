@@ -1,4 +1,3 @@
-import datetime
 import json
 import re
 import requests
@@ -6,7 +5,6 @@ import requests
 from stores.registration import register
 from templates import mc_template
 from logger import logger
-from models.post import Post
 
 
 mc_logger = logger.get_logger('Microcenter', './logfile.log')
@@ -117,23 +115,20 @@ def mc_run(submission):
     :return: a Post object and appropriate markdown
     """
     url = strip_url(submission.url)
-
     html = get_html(url)
-    metadata = get_metadata(html)
 
+    metadata = get_metadata(html)
     stores = get_stores(html)
     inventories = get_inventories(url, stores)
 
-    post = Post(submission.fullname,
-                metadata.get('mpn'),
-                metadata.get('price'),
-                datetime.date.today(),
-                'microcenter.com',
-                )
-
     markdown = mc_template.build_markdown(inventories, metadata, url)
 
-    return post, markdown
+    product_details = {
+        'mpn': metadata.get('mpn'),
+        'price': metadata.get('price'),
+    }
+
+    return product_details, markdown
 
 
 def main():

@@ -1,3 +1,4 @@
+import datetime
 import os
 import sys
 import time
@@ -45,7 +46,12 @@ class Bot:
             site_name, site_func = self.get_site_func(submission.url)
             if site_func:
                 self.logger.info('gathering data...')
-                post, markdown = site_func(submission)
+                product_details, markdown = site_func(submission)
+                post = Post(submission.fullname,
+                            product_details.get('mpn', None),
+                            product_details.get('price', None),
+                            datetime.date.fromtimestamp(submission.created),
+                            site_name)
                 self.submit_reply(submission, markdown)
                 self.save_data(post)
                 time.sleep(10)
