@@ -14,7 +14,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from logger import logger
 from database.base import SessionMode, session_scope
 from models.post import Post
-from reddit import RedditHandler
+from reddit.reddit import RedditHandler
 from stores import registration
 
 
