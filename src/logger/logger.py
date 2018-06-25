@@ -1,12 +1,12 @@
 import logging
 
 
-def get_logger(name: str, file: str, level):
+def get_logger(name: str, file: str):
     logger = logging.getLogger(name)
-    logger.setLevel(level)
+    logger.setLevel(logging.INFO)
 
     handler = logging.FileHandler(file)
-    handler.setLevel(level)
+    handler.setLevel(logging.INFO)
 
     formatter = logging.Formatter(f'%(asctime)s'
                                   f'-%(levelname)s'
