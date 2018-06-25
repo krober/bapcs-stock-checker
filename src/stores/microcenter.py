@@ -67,31 +67,63 @@ def get_stores(html: str):
     return store_list
 
 
-def get_inventories(url: str, stores: list):
+def get_inventory(html: str):
+    pattern = '(?s)(?<=inventoryCnt">)(.*?)(?=<)'
+    data = re.search(pattern, html)
+    try:
+        inventory = data.group(0).strip()
+    except AttributeError as e:
+        # No inventoryCnt class found = only avail in store or sold out at location
+        mc_logger.error(f'{e.__class__}: {e}')
+    else:
+        if inventory != 'Sold Out':
+            return inventory
+    return None
+
+
+def get_open_box(html: str):
+    pattern = '(?s)(?<=opCostNew">)(.*?)(?=<)'
+    data = re.search(pattern, html)
+    try:
+        open_box = data.group(0).strip()
+    except AttributeError as e:
+        # No opCostNew id found = no open box available at location
+        mc_logger.error(f'{e.__class__}: {e}')
+    else:
+        return open_box
+    return None
+
+
+def get_store_data(url: str, stores: list):
     """
     given item url, list of stores, return all store inventories
     :param url: str, base product url
     :param stores: list of tuples of store number, store name
-    :return: list of tuples, store name, inventory, sorted alphabetically by store
+    :return: dict, enabled columns & inventories as tuple
     """
-    pattern = '(?s)(?<=inventoryCnt">)(.*?)(?=<)'
+    store_data = {
+        'Location': True,
+        'Quantity': True,
+        'Open Box': False,
+    }
     inventories = []
     for store_number, store_name in stores:
         if store_number == '029':
             # skip web store
             continue
         html = get_html(url, store_number)
-        data = re.search(pattern, html)
-        try:
-            inventory = data.group(0).strip()
-        except AttributeError as e:
-            # No inventoryCnt class found = only avail in store or sold out at location
-            mc_logger.error(f'{e.__class__}: {e}')
-        else:
-            if inventory != 'Sold Out':
-                inventories.append(tuple((store_name, store_number, inventory)))
+        inventory = get_inventory(html)
+        open_box = get_open_box(html)
+        if open_box is not None:
+            store_data['Open Box'] = True
+        if inventory is not None or open_box is not None:
+            inventories.append(tuple((store_name,
+                                      store_number,
+                                      inventory,
+                                      open_box,)))
     inventories.sort(key=lambda store: store[0])
-    return inventories
+    store_data['inventories'] = inventories
+    return store_data
 
 
 def get_metadata(html: str):
@@ -123,9 +155,9 @@ def mc_run(submission):
 
     metadata = get_metadata(html)
     stores = get_stores(html)
-    inventories = get_inventories(url, stores)
+    store_data = get_store_data(url, stores)
 
-    markdown = mc_template.build_markdown(inventories, metadata, url)
+    markdown = mc_template.build_markdown(store_data, metadata, url)
 
     product_details = {
         'mpn': metadata.get('mpn'),
@@ -161,9 +193,9 @@ def main():
     # metadata = get_metadata(html)
     #
     # stores = get_stores(html)
-    # inventories = get_store_data(url, stores)
+    # store_data = get_store_data(url, stores)
     #
-    # markdown = mc_template.build_markdown(inventories, metadata, url)
+    # markdown = mc_template.build_markdown(store_data, metadata, url)
     #
     # print(markdown)
 
