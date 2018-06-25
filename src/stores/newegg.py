@@ -1,4 +1,3 @@
-import logging
 import datetime
 import re
 import requests
@@ -35,6 +34,7 @@ def extract_from_html(pattern: str, html: str):
     try:
         data = data.group(0)
     except AttributeError as e:
+        # usually combo deals
         newegg_logger.error(f'{e.__class__}: {pattern}: {e}')
         newegg_logger.error(f'data: {data}')
         return None
@@ -64,6 +64,7 @@ def get_price(html: str):
     try:
         price = int(round(float(price_text)))
     except ValueError as e:
+        # usually 'see price in cart' deals
         newegg_logger.error(f'{e.__class__}: {e}')
         newegg_logger.error(f'price_text: {price_text}')
         return None
