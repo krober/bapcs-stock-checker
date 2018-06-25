@@ -143,9 +143,9 @@ def get_metadata(html: str):
 @register('microcenter.com')
 def mc_run(submission):
     """
-    Given a submission, return a Post object and appropriate markdown
+    Given a submission, return product details and appropriate markdown
     :param submission: praw.Reddit.submission
-    :return: a Post object and appropriate markdown
+    :return: dict, product_details and str, appropriate markdown
     """
     url = strip_url(submission.url)
     html = get_html(url)

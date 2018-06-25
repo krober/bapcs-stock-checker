@@ -77,9 +77,9 @@ def get_price(html: str):
 @register('newegg.com')
 def ne_run(submission):
     """
-    Given a submission, return a Post object
+    Given a submission, return product details
     :param submission: praw.Reddit.submission
-    :return: Post
+    :return: dict, product_details
     """
     # TODO: add markdown
     url = submission.url
