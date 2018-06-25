@@ -11,10 +11,17 @@ ebay_logger = logger.get_logger('Ebay', './logfile.log')
 
 
 def get_page(url: str):
+    """Simple request based on url"""
     return requests.get(url)
 
 
 def get_xpath(path: str, tree: html.HtmlElement):
+    """
+    Looks for path/element in tree
+    :param path: str, valid xpath search string
+    :param tree: html.HtmlElement from lxml
+    :return: element, based on path; or None if not found
+    """
     try:
         element = tree.xpath(path)[0]
     except IndexError as e:
@@ -26,12 +33,18 @@ def get_xpath(path: str, tree: html.HtmlElement):
 
 
 def get_item_number(tree: html.HtmlElement):
+    """Returns ebay item number"""
     path = '//div[@id="descItemNumber"]/text()'
     number = get_xpath(path, tree)
     return number
 
 
 def get_price(tree: html.HtmlElement):
+    """
+    Parses price from ebay page
+    :param tree: html.HtmlElement from lxml
+    :return: int, rounded, if exists; else None
+    """
     path = '//span[@id="prcIsum"]'
     price_tag = get_xpath(path, tree)
     if price_tag is not None:
@@ -42,6 +55,11 @@ def get_price(tree: html.HtmlElement):
 
 
 def get_seller(tree: html.HtmlElement):
+    """
+    Parses ebay seller name from ebay page
+    :param tree: html.HtmlElement from lxml
+    :return: str, seller name if exists; else None
+    """
     path = '//a[@id="mbgLink"]'
     seller_tag = get_xpath(path, tree)
     if seller_tag is not None:
@@ -52,12 +70,17 @@ def get_seller(tree: html.HtmlElement):
 
 
 def get_feedback(text: str):
+    """
+    Parses total feedback count from ebay page
+    :param text: str, from requests.get().text
+    :return: int, total feedback for seller (stars); None if not available
+    """
     pattern = '(?s)(?<=feedback score: )(.*?)(?=")'
     data = re.search(pattern, text)
     try:
         feedback = data.group(0).strip()
     except AttributeError as e:
-        # No itemprop="mpn" found = mpn not entered by seller
+        # Bad link, etc
         ebay_logger.error(f'{e.__class__}: {e}')
         return None
     else:
@@ -66,6 +89,11 @@ def get_feedback(text: str):
 
 
 def get_score(tree: html.HtmlElement):
+    """
+    Parses % feedback score for seller
+    :param tree: html.HtmlElement from lxml
+    :return: str, ex '99.2%' - feedback score; None if not available
+    """
     path = '//div[@id="si-fb"]/text()'
     score = get_xpath(path, tree)
     if score is not None:
@@ -74,6 +102,12 @@ def get_score(tree: html.HtmlElement):
 
 
 def get_mpn(text: str):
+    """
+    Parses mpn for product
+    :param text: str, from requests.get().text
+    :return: str, manuf. product number, if
+    entered by seller; else None
+    """
     pattern = '(?s)(?<=itemprop="mpn">)(.*?)(?=<)'
     data = re.search(pattern, text)
     try:
@@ -87,6 +121,11 @@ def get_mpn(text: str):
 
 
 def is_free_shipping(tree: html.HtmlElement):
+    """
+    Determines if product offers free shipping
+    :param tree: html.HtmlElement from lxml
+    :return: True if free, else False; None if not found
+    """
     path = '//span[@id="fshippingCost"]'
     ship_parent = get_xpath(path, tree)
     if ship_parent is not None:
@@ -99,9 +138,9 @@ def is_free_shipping(tree: html.HtmlElement):
 @register('ebay.com')
 def eb_run(submission):
     """
-    Given a submission, return a Post object
+    Given a submission, return product details
     :param submission: praw.Reddit.submission
-    :return: Post
+    :return: dict, product_details
     """
     # TODO: add markdown
     page = get_page(submission.url)
