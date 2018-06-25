@@ -29,7 +29,7 @@ class Bot:
     site_functions = registration.site_functions
 
     def __init__(self, sub_to_stream: str):
-        self.logger = logger.get_logger('Bot', './logfile.log', logging.DEBUG)
+        self.logger = logger.get_logger('Bot', './logfile.log')
         self.logger.info(f'initializing on {sub_to_stream}...')
         self.reddit = praw.Reddit()
         self.subreddit = self.reddit.subreddit(sub_to_stream)
@@ -164,7 +164,7 @@ def main(sub_to_stream: str):
     :attr max_uncaught: number of 'unhandled' to catch before exiting
     :attr attempts: starts at 1 to start at first attempt, increases after 'unhandled'
     """
-    wrapper_logger = logger.get_logger('Wrapper', './logfile.log', logging.INFO)
+    wrapper_logger = logger.get_logger('Wrapper', './logfile.log')
     wait_seconds = 60
     max_uncaught = 10
     attempts = 1

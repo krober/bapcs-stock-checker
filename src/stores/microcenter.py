@@ -10,7 +10,7 @@ from logger import logger
 from models.post import Post
 
 
-mc_logger = logger.get_logger('Microcenter', './logfile.log', logging.INFO)
+mc_logger = logger.get_logger('Microcenter', './logfile.log')
 
 
 def strip_url(url: str):
