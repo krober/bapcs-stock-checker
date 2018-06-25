@@ -1,18 +1,15 @@
-import logging
-import datetime
 import requests
 
 from stores.registration import register
 from logger import logger
-from models.post import Post
 
-# TODO change store_name to name of store being parsed
-store_name_logger = logger.get_logger('Store_name', './logfile.log', logging.INFO)
+# TODO change 'store_name' to name of store being parsed
+store_name_logger = logger.get_logger('Store_name', './logfile.log')
 
 
 """
-The below functions are just suggestions, they do not have to be implemented in 
-exactly this manner, or at all
+The below functions are just suggestions, they do not have to be 
+implemented in exactly this manner, or at all
 """
 
 
@@ -40,19 +37,24 @@ def get_price(html: str):
 This one is required, but the name can be anything
 Decorator should include friendly domain name, as it is what 
 urls will be checked against when determining which
-store parser to use. ex. 'newegg.com'
+store parser to use. ex. 'newegg.com'.  Decorator and import
+may be removed/commented out to run this module independently
 """
 
 
-@register('your_store.com')
+@register('your-store.com')
 def ne_run(submission):
     """
-    Given a submission, return a Post object and optionally
-    a markdown formatted string to be used as reddit comment
-    Either may be None, but strongly recommend at least creating
-    a Post object with submission.fullname
+    Given a submission, return a dictionary containing
+    the mpn and price (either may be None), and optionally
+    a markdown formatted string (also may be None) to be used as
+    a reddit comment.  Due to a wide variety of factors,
+    such as network errors, sites being down, excess traffic
+    to sites, etc, the mpn & price dictionary and the markdown
+    string may be returned as None.  The submission's fullname
+    will still be saved to the database as having been 'parsed'.
     :param submission: praw.Reddit.submission
-    :return: Post, str; Post object and markdown
+    :return: dict, str; product_details and markdown
     """
 
     # again, just a template
@@ -62,14 +64,12 @@ def ne_run(submission):
     mpn = get_mpn(html)
     price = get_price(html)
 
-    post = Post(submission.fullname,
-                mpn,
-                price,
-                datetime.date.today(),
-                'your_store.com',
-                )
+    product_details = {
+        'mpn': mpn,
+        'price': price,
+    }
 
-    return post, None
+    return product_details, None
 
 
 def main():
