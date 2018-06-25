@@ -51,7 +51,8 @@ class Post(Base):
         """
         max_len = getattr(self.__class__, key).prop.columns[0].type.length
         if value and len(value) > max_len:
-            self.post_logger.info(f'{key}: {value} - violated max length and was truncated')
+            self.post_logger.warning(f'{key}: {value} - '
+                                     f'violated max length and was truncated')
             return value[:max_len]
         return value
 

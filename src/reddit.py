@@ -17,7 +17,7 @@ class RedditHandler:
         return subreddit
 
     @staticmethod
-    def submit_reply(submission: praw.Reddit.submission, markdown: str):
+    def reply_to_submission(submission: praw.Reddit.submission, markdown: str):
         """
         Attempts to post comment to reddit submission; sleeps
         and retries if ratelimit enforced by reddit
@@ -35,7 +35,7 @@ class RedditHandler:
                     wait_mins = RedditHandler.get_ratelimit(e.message) * 60
                     logger.info(f'Waiting {wait_mins} mins, then resubmitting...')
                     time.sleep(wait_mins)
-                    RedditHandler.submit_reply(submission, markdown)
+                    RedditHandler.reply_to_submission(submission, markdown)
             else:
                 logger.info('replied')
         logger.debug('skipping reply, markdown is None')

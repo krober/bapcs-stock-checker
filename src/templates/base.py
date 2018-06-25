@@ -1,5 +1,5 @@
 def none_to_empty_string(data: str):
-    return '' if not data else data
+    return '' if data is None else data
 
 
 def get_header(metadata: dict):

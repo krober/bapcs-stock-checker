@@ -48,6 +48,7 @@ class Bot:
             self.logger.info(f'found {submission.fullname}: {submission.title}')
             if self.has_been_parsed(submission):
                 continue
+            FOLLOWED_THIS_SESSION.append(submission.fullname)
             site_name, site_function = self.get_site_function(submission.url)
             if site_function is not None:
                 self.logger.info('gathering data...')
@@ -57,7 +58,7 @@ class Bot:
                             product_details.get('price', None),
                             datetime.date.fromtimestamp(submission.created),
                             site_name)
-                RedditHandler.submit_reply(submission, markdown)
+                RedditHandler.reply_to_submission(submission, markdown)
                 self.save_to_database(post)
                 time.sleep(10)
             self.logger.info('waiting for next submission...')
@@ -75,7 +76,6 @@ class Bot:
         elif self.already_replied_to(submission):
             self.logger.info('post already replied to')
             return True
-        FOLLOWED_THIS_SESSION.append(submission.fullname)
         return False
 
     def already_replied_to(self, submission: praw.Reddit.submission):
@@ -100,7 +100,8 @@ class Bot:
             if site in url:
                 self.logger.info(f'found {site}')
                 return site, func
-        self.logger.warning(f'No func mapped to {url[url.find("//")+2:url.find(".com")+4]}')
+        self.logger.warning(f'No func mapped to '
+                            f'{url[url.find("//")+2:url.find("//")+22]}')
         return None, None
 
     def save_to_database(self, post: Post):
@@ -164,7 +165,7 @@ def main(sub_to_stream: str):
             """
             wait_time = wait_seconds * attempts * 2
             wrapper_logger.critical(f'{e.__class__}: e\n'
-                                    f'restarting in {wait_time} seconds')
+                                    f'restarting in {wait_time / 60} minutes')
             time.sleep(wait_time)
             attempts += 1
 

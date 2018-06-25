@@ -65,7 +65,7 @@ def get_stores(html: str):
 
 def get_inventories(url: str, stores: list):
     """
-    given item url, list of stores, and store_only, return all store inventories
+    given item url, list of stores, return all store inventories
     :param url: str, base product url
     :param stores: list of tuples of store number, store name
     :return: list of tuples, store name, inventory, sorted alphabetically by store
