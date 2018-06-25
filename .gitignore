@@ -61,7 +61,10 @@ modules.xml
 *.ipr
 
 /venv
-/src/reddit/praw.ini
+/src/praw.ini
 /src/database/db.ini
+/src/**/logfile.log
 /src/logfile.log
 /src/log-archive
+/tests/**/logfile.log
+/tests/logfile.log
