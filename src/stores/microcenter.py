@@ -116,10 +116,8 @@ def get_store_data(url: str, stores: list):
         if open_box is not None:
             store_data['Open Box'] = True
         if inventory is not None or open_box is not None:
-            inventories.append(tuple((store_name,
-                                      store_number,
-                                      inventory,
-                                      open_box,)))
+            line = (store_name, store_number, inventory, open_box)
+            inventories.append(line)
     inventories.sort(key=lambda store: store[0])
     store_data['inventories'] = inventories
     return store_data
