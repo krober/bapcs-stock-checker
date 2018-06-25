@@ -165,7 +165,7 @@ def main(sub_to_stream: str):
             """
             wait_time = wait_seconds * attempts * 2
             wrapper_logger.critical(f'{e.__class__}: e\n'
-                                    f'restarting in {wait_time / 60} minutes')
+                                    f'restarting in {wait_time // 60} minutes')
             time.sleep(wait_time)
             attempts += 1
 

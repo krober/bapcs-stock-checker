@@ -32,7 +32,7 @@ def extract_from_html(pattern: str, html: str):
     try:
         data = data.group(0)
     except AttributeError as e:
-        # usually combo deals
+        # usually combo deals, also flash.newegg.com
         newegg_logger.error(f'{e.__class__}: {pattern}: {e}')
         newegg_logger.error(f'data: {data}')
         return None
