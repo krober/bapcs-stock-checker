@@ -3,8 +3,6 @@ Listens to reddit.com/r/buildapcsales for posts, and replies with price, part nu
 Can be expanded with additional sites under /src/stores, provided they return the correct info to main  
 Also, logs prices to db for possible price history analysis, but can be reconfigured to use text or csv for simplicity.  If reconfigured, should log reddit post IDs replied to at minimum to avoid duplicate comments
 
-Concept inspired by [MCStockCheckerBot](https://github.com/darakelian/MCStockCheckerBot)
-
 # Domains  
 
 + Microcenter (Database Logging, Reddit Submission Replies)
