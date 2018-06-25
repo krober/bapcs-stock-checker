@@ -139,8 +139,10 @@ def mc_run(submission):
 def main():
     pass
     """
-    url = 'http://www.microcenter.com/product/501644/HMD_Odyssey_Windows_Mixed_Reality_Headset?storeID=45&gclid=EAIaIQobChMIvrey9tzj2wIVkWV-Ch0eMAjQEAQYASABEgIjL_D_BwE'
-    url = strip_url(url)
+    url = 'http://www.microcenter.com/product/501644/HMD_Odyssey_Windows_Mixed_Reality_Headset'
+    query_string = '?storeID=45&gclid=EAIaIQobChMIvrey9tzj2wIVkWV-Ch0eMAjQEAQYASABEgIjL_D_BwE'
+    
+    url = strip_url(url + query_string)
 
     html = get_html(url)
     metadata = get_metadata(html)
