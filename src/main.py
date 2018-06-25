@@ -44,7 +44,7 @@ class Bot:
             if self.has_been_parsed(submission):
                 continue
             site_name, site_func = self.get_site_func(submission.url)
-            if site_func:
+            if site_func is not None:
                 self.logger.info('gathering data...')
                 product_details, markdown = site_func(submission)
                 post = Post(submission.fullname,
@@ -103,7 +103,7 @@ class Bot:
         :param markdown: str, formatted markdown for reddit
         :return: nothing
         """
-        if markdown:
+        if markdown is not None:
             self.logger.info('attempting reply...')
             try:
                 submission.reply(markdown)
