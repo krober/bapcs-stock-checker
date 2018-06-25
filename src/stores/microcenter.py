@@ -19,9 +19,8 @@ def strip_url(url: str):
     """
     if 'storeID=' in url:
         begin_id = url.find('storeID=')
-        end_id = begin_id + 12
+        end_id = begin_id + 11  # len('storeID=095')
         url = url[:begin_id] + url[end_id:]
-    print(url)
     mc_logger.info(f'url: {url}')
     return url
 
