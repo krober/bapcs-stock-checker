@@ -11,9 +11,9 @@ logger = logger.get_logger('RedditHandler', './logfile.log')
 class RedditHandler:
 
     @staticmethod
-    def get_subreddit(sub_to_stream: str):
+    def get_subreddit(sub_to_init: str):
         reddit = praw.Reddit()
-        subreddit = reddit.subreddit(sub_to_stream)
+        subreddit = reddit.subreddit(sub_to_init)
         return subreddit
 
     @staticmethod
