@@ -4,6 +4,7 @@ import sys
 import time
 
 import praw
+import prawcore
 
 from sqlalchemy import exists
 
@@ -173,6 +174,13 @@ def main(sub_to_stream: str):
         wrapper_logger.info(f'starting attempt {attempts}...')
         try:
             bot.run()
+        except prawcore.exceptions.ResponseException as e:
+            # network/response error in the main loop, okay to restart
+            wrapper_logger.critical(f'{e.__class__}: e')
+            wrapper_logger.debug(f'likely just a network/praw error, '
+                                 f'safe to restart immediately')
+            wrapper_logger.critical(f'restarting in {wait_seconds} seconds')
+            time.sleep(wait_seconds)
         except Exception as e:
             wait_time = wait_seconds * attempts * 2
             wrapper_logger.critical(f'{e.__class__}: e')
