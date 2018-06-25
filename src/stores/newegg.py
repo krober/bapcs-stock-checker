@@ -93,7 +93,9 @@ def ne_run(submission):
         'price': price,
     }
 
-    return product_details, None
+    markdown = None
+
+    return product_details, markdown
 
 
 def main():
