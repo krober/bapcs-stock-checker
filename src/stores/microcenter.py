@@ -17,7 +17,11 @@ def strip_url(url: str):
     :param url: str, microcenter url
     :return: str, stripped of query string as necessary
     """
-    url = url[:url.find('?')]
+    if 'storeID=' in url:
+        begin_id = url.find('storeID=')
+        end_id = begin_id + 12
+        url = url[:begin_id] + url[end_id:]
+    print(url)
     mc_logger.info(f'url: {url}')
     return url
 
@@ -132,23 +136,38 @@ def mc_run(submission):
 
 
 def main():
+
+    # url = 'http://www.microcenter.com/product/501644/HMD_Odyssey_Windows_Mixed_Reality_Headset'
+    # query_string = '?storeID=45&gclid=EAIaIQobChMIvrey9tzj2wIVkWV-Ch0eMAjQEAQYASABEgIjL_D_BwE'
+    # url += query_string
+    # url = strip_url(url)
+    #
+    # url = 'http://www.microcenter.com/product/502941/860_EVO_500GB_MLC_V-NAND_SATA_III_6Gb-s_25_Internal_Solid_State_Driv?storeID=151'
+    # url = strip_url(url)
+    #
+    # url = 'http://www.microcenter.com/single_product_results.aspx?sku=782409&storeID=095'
+    # url = strip_url(url)
+    #
+    # url = 'http://www.microcenter.com/single_product_results.aspx?sku=782409&storeID=095&some=otherStuff'
+    # url = strip_url(url)
+    #
+    # url = 'http://www.microcenter.com/single_product_results.aspx?sku=782409'
+    # url = strip_url(url)
+    #
+    # url = 'http://www.microcenter.com/product/477236/BarraCuda_2TB_7200RPM_SATA_III_6Gb-s_35_Internal_Hard_Drive'
+    # url = strip_url(url)
+    #
+    # html = get_html(url)
+    # metadata = get_metadata(html)
+    #
+    # stores = get_stores(html)
+    # inventories = get_store_data(url, stores)
+    #
+    # markdown = mc_template.build_markdown(inventories, metadata, url)
+    #
+    # print(markdown)
+
     pass
-    """
-    url = 'http://www.microcenter.com/product/501644/HMD_Odyssey_Windows_Mixed_Reality_Headset'
-    query_string = '?storeID=45&gclid=EAIaIQobChMIvrey9tzj2wIVkWV-Ch0eMAjQEAQYASABEgIjL_D_BwE'
-    
-    url = strip_url(url + query_string)
-
-    html = get_html(url)
-    metadata = get_metadata(html)
-
-    stores = get_stores(html)
-    inventories = get_inventories(url, stores)
-
-    markdown = mc_template.build_markdown(inventories, metadata, url)
-
-    print(markdown)
-    """
 
 
 if __name__ == '__main__':
