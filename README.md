@@ -9,6 +9,9 @@ Also, logs prices to db for possible price history analysis, but can be reconfig
 + Newegg (Database Logging)
 + Ebay (Database Logging, No Reddit Submission yet, but in prog)
 + Amazon (Database Logging)
++ BestBuy (Database Logging)
++ Frys (Database Logging)
++ Rakuten (Database Logging)
 
 # Language  
 Python  
@@ -57,6 +60,7 @@ PyMySQL
 
 + Markdown for reply not needed (just return None instead, will still log to database)  
 + Check out /examples/store_parser.py and existing store modules  
++ Prefer LXML over regexes, but site/page layout can make that exceedingly difficult in a lot of cases
 + Must accept a praw.Reddit.submission
 + Must return 2 things:  
     + A dictionary containing mpn and price, or None values for either/both
