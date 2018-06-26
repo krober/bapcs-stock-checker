@@ -7,6 +7,8 @@ Also, logs prices to db for possible price history analysis, but can be reconfig
 
 + Microcenter (Database Logging, Reddit Submission Replies)
 + Newegg (Database Logging)
++ Ebay (Database Logging, No Reddit Submission yet, but in prog)
++ Amazon (Database Logging)
 
 # Language  
 Python  
@@ -15,6 +17,7 @@ Python
 # Libraries  
 PRAW  
 Requests  
+LXML  
 SQLAlchemly  
 PyMySQL  
 + addl dependencies, all included in requirements.txt  
