@@ -100,6 +100,7 @@ def get_store_data(url: str, stores: list):
     :param stores: list of tuples of store number, store name
     :return: dict, enabled columns & inventories as tuple
     """
+    # TODO make this less gross
     store_data = {
         'Location': True,
         'Quantity': True,

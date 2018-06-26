@@ -118,7 +118,8 @@ class Bot:
                 session.add(post)
             self.logger.info('written to db')
 
-    def load_stores(self):
+    @staticmethod
+    def load_stores():
         """
         Iterates though /stores and imports all modules.  This process includes
         registration of store site functions decorated with @register.
