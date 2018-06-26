@@ -12,7 +12,12 @@ ebay_logger = logger.get_logger('Ebay', './logfile.log')
 
 def get_page(url: str):
     """Simple request based on url"""
-    return requests.get(url)
+    headers = {
+        'DNT': '1',
+        'Host': 'www.ebay.com',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+    }
+    return requests.get(url, headers=headers)
 
 
 def get_xpath(path: str, tree: html.HtmlElement):
@@ -34,8 +39,9 @@ def get_xpath(path: str, tree: html.HtmlElement):
 
 def get_item_number(tree: html.HtmlElement):
     """Returns ebay item number"""
-    path = '//div[@id="descItemNumber"]/text()'
-    number = get_xpath(path, tree)
+    path = '//div[@id="descItemNumber"]'
+    number_tag = get_xpath(path, tree)
+    number = number_tag.text
     return number
 
 
@@ -94,11 +100,13 @@ def get_score(tree: html.HtmlElement):
     :param tree: html.HtmlElement from lxml
     :return: str, ex '99.2%' - feedback score; None if not available
     """
-    path = '//div[@id="si-fb"]/text()'
-    score = get_xpath(path, tree)
-    if score is not None:
+    path = '//div[@id="si-fb"]'
+    score_tag = get_xpath(path, tree)
+    if score_tag is not None:
+        score = score_tag.text
         score = score.split(u'\xa0')[0]
-    return score
+        return score
+    return None
 
 
 def get_mpn(text: str):
@@ -144,8 +152,8 @@ def eb_run(submission):
     """
     # TODO: add markdown
     page = get_page(submission.url)
-    content = page.content
     text = page.text
+    content = page.content
     tree = html.fromstring(content)
 
     # item_number = get_item_number(tree)
@@ -174,8 +182,8 @@ def main():
     # url = 'https://pages.ebay.com/promo/2018/0621/66698.html?_trkparms=%26clkid%3D4767729480946058037'
     #
     # page = get_page(url)
-    # content = page.content
     # text = page.text
+    # content = page.content
     # tree = html.fromstring(content)
     #
     # item_number = get_item_number(tree)
