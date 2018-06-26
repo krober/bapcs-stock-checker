@@ -156,7 +156,7 @@ def main(sub_to_stream: str):
         except prawcore.exceptions.ResponseException as e:
             # network/response error from praw in main loop, okay to restart
             wrapper_logger.error(f'{e.__class__}: e')
-            wrapper_logger.info(f'restarting in {wait_seconds} seconds')
+            wrapper_logger.info(f'restarting in {wait_seconds * 5} seconds')
             time.sleep(wait_seconds)
         except Exception as e:
             """
