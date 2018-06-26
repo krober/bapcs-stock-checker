@@ -1,6 +1,7 @@
 certifi==2018.4.16
 chardet==3.0.4
 idna==2.7
+lxml==4.2.2
 praw==5.4.0
 prawcore==0.14.0
 PyMySQL==0.8.1
