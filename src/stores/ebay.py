@@ -14,7 +14,6 @@ def get_page(url: str):
     """Simple request based on url"""
     headers = {
         'DNT': '1',
-        'Host': 'www.ebay.com',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
     }
     return requests.get(url, headers=headers)
@@ -41,8 +40,10 @@ def get_item_number(tree: html.HtmlElement):
     """Returns ebay item number"""
     path = '//div[@id="descItemNumber"]'
     number_tag = get_xpath(path, tree)
-    number = number_tag.text
-    return number
+    if number_tag is not None:
+        number = number_tag.text
+        return number
+    return None
 
 
 def get_price(tree: html.HtmlElement):
