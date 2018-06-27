@@ -64,9 +64,18 @@ def get_stores(text: str):
     :return: list of tuples, store name, store number
     """
     pattern = "(?<=inventory = )(.*)"
-    store_list = extract_to_json(pattern, html)
-    store_list = [(store['storeNumber'], store['storeName']) for store in store_list]
-    return store_list
+    stores = extract_from_json(pattern, text)
+    stores_admin = []
+    for store in stores:
+        name = store.get('storeName')
+        number = store.get('storeNumber')
+        if number == '029':
+            # skip web store
+            continue
+        store_admin = (name, number)
+        if None not in store_admin:
+            stores_admin.append(store_admin)
+    return stores_admin
 
 
 def get_inventory(tree: html.HtmlElement):
@@ -113,27 +122,23 @@ def get_store_data(url: str, stores: list):
     :param stores: list of tuples of store name, store number
     :return: dict, enabled columns & inventories as list of tuples
     """
-    # TODO make this less gross
     store_data = {
         'Location': True,
         'Quantity': True,
         'Open Box': False,
+        'inventories': [],
     }
-    inventories = []
-    for store_number, store_name in stores:
-        if store_number == '029':
-            # skip web store
-            continue
-        html = get_html(url, store_number)
-        inventory = get_inventory(html)
-        open_box = get_open_box(html)
+    for store_name, store_number in stores:
+        page = get_page(url, store_number)
+        tree = html.fromstring(page.content)
+        inventory = get_inventory(tree)
+        open_box = get_open_box(tree)
         if open_box is not None:
             store_data['Open Box'] = True
         if inventory is not None or open_box is not None:
             line = (store_name, store_number, inventory, open_box)
-            inventories.append(line)
-    inventories.sort(key=lambda store: store[0])
-    store_data['inventories'] = inventories
+            store_data['inventories'].append(line)
+    store_data['inventories'].sort(key=lambda store: store[0])
     return store_data
 
 
