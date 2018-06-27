@@ -27,12 +27,12 @@ def strip_url(url: str):
     return url
 
 
-def get_html(url: str, store_num: str='095'):
+def get_page(url: str, store_num: str= '095'):
     """
-    Given a Microcenter URL, return raw HTML
+    Given a Microcenter URL, return request object
     :param url: str, microcenter url
     :param store_num: str, store number as string, defaults to MO - Brentwood
-    :return: str, html from url
+    :return: requests.model.Response, html from url
     """
     headers = {
         'Cookie': 'storeSelected=' + store_num,
@@ -44,7 +44,8 @@ def get_html(url: str, store_num: str='095'):
 
 def extract_from_json(pattern: str, text: str):
     """
-    Given raw Microcenter HTML and search pattern, find, format, and return matching python dictionary
+    Given raw Microcenter HTML and search pattern, find, format,
+    and return matching python dictionary
     :param pattern: str, regex to search for in html
     :param text: str, raw html
     :return: dict, from html based on pattern
@@ -58,9 +59,9 @@ def extract_from_json(pattern: str, text: str):
 
 def get_stores(text: str):
     """
-    given mc html, return list stores
-    :param html: str, raw html
-    :return: list of tuples, store number, store name
+    Given mc html, return list stores
+    :param text: str, raw html
+    :return: list of tuples, store name, store number
     """
     pattern = "(?<=inventory = )(.*)"
     store_list = extract_to_json(pattern, html)
@@ -107,10 +108,10 @@ def get_open_box(tree: html.HtmlElement):
 
 def get_store_data(url: str, stores: list):
     """
-    given item url, list of stores, return all store inventories
+    Given item url and list of stores, return all store inventories
     :param url: str, base product url
-    :param stores: list of tuples of store number, store name
-    :return: dict, enabled columns & inventories as tuple
+    :param stores: list of tuples of store name, store number
+    :return: dict, enabled columns & inventories as list of tuples
     """
     # TODO make this less gross
     store_data = {
@@ -136,14 +137,14 @@ def get_store_data(url: str, stores: list):
     return store_data
 
 
-def get_metadata(html: str):
+def get_metadata(text: str):
     """
     Given html, return general product data
-    :param html: str, raw html
-    :return: dict, specified addl_product_attrs
+    :param text: str, raw html
+    :return: dict, specified metadata
     """
     pattern = "(?s)(?<=dataLayer = \[)(.*?)(?=\];)"
-    all_metadata = extract_to_json(pattern, html)
+    all_metadata = extract_from_json(pattern, text)
     store_only_flag = 'Available for In-Store Pickup Only.'
     metadata = {
         'price': int(round(float(all_metadata['productPrice']))),
