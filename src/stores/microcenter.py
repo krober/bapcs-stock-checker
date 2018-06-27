@@ -206,10 +206,14 @@ def main():
     # url = 'http://www.microcenter.com/product/477236/BarraCuda_2TB_7200RPM_SATA_III_6Gb-s_35_Internal_Hard_Drive'
     # url = strip_url(url)
     #
-    # html = get_html(url)
-    # metadata = get_metadata(html)
+    # url = 'http://www.microcenter.com/product/503281/Inspiron_15_3567_156_Laptop_Computer_-_Black'
+    # url = strip_url(url)
     #
-    # stores = get_stores(html)
+    # page = get_page(url)
+    # text = page.text
+    #
+    # metadata = get_metadata(text)
+    # stores = get_stores(text)
     # store_data = get_store_data(url, stores)
     #
     # markdown = mc_template.build_markdown(store_data, metadata, url)
