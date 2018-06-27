@@ -19,19 +19,19 @@ from stores import registration
 
 
 """
-List of submissions followed since main start, used to mitigate bad links
-that cause exceptions between the parsing stage and the database logging
-stage. Submissions appended here will be skipped on the next bot.run() attempt.
+List of submissions followed since main start, used to mitigate bad links that
+cause exceptions between the parsing stage and the database logging stage.
+Submissions appended here will be skipped on the next bot.run() attempt.
 """
 FOLLOWED_THIS_SESSION = []
 
 
 class Bot:
     """
-    Bot that will initialize on given subreddit,
-    and scan for products to search/parse for information
-    Depending on site function configuration, will post comments to submissions
-    :attr site_functions: dictionary that maps domain to its corresponding function in /stores
+    Bot that will initialize on given subreddit, and scan for products to
+    search/parse for information. Depending on site function configuration,
+    will post comments to submissions
+    :attr site_functions: dictionary mapping domains to .stores functions
     """
     site_functions = registration.site_functions
 
