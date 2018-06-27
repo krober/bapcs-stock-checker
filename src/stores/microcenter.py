@@ -2,6 +2,8 @@ import json
 import re
 import requests
 
+from lxml import html
+
 from stores.registration import register
 from templates import mc_template
 from logger import logger
@@ -37,24 +39,24 @@ def get_html(url: str, store_num: str='095'):
         'DNT': '1',
         'Host': 'www.microcenter.com',
     }
-    return requests.get(url, headers=headers).text
+    return requests.get(url, headers=headers)
 
 
-def extract_to_json(pattern: str, html: str):
+def extract_from_json(pattern: str, text: str):
     """
     Given raw Microcenter HTML and search pattern, find, format, and return matching python dictionary
     :param pattern: str, regex to search for in html
-    :param html: str, raw html
+    :param text: str, raw html
     :return: dict, from html based on pattern
     """
-    data = re.search(pattern, html)
+    data = re.search(pattern, text)
     data_json = data.group(0)\
                     .strip()\
                     .replace("'", "\"")
     return json.loads(data_json)
 
 
-def get_stores(html: str):
+def get_stores(text: str):
     """
     given mc html, return list stores
     :param html: str, raw html
@@ -66,13 +68,18 @@ def get_stores(html: str):
     return store_list
 
 
-def get_inventory(html: str):
-    pattern = '(?s)(?<=inventoryCnt">)(.*?)(?=<)'
-    data = re.search(pattern, html)
+def get_inventory(tree: html.HtmlElement):
+    """
+    Given html.HtmlElement for single MC store, parse
+    and return inventory count
+    :param tree: html.HtmlElement
+    :return: str, inventory, ex '9 in stock'; None if parse error
+    """
+    path = '//span[@class="inventoryCnt"]'
     try:
-        inventory = data.group(0).strip()
-    except AttributeError as e:
-        # No inventoryCnt class found = only avail in store or sold out at location
+        inventory = tree.xpath(path)[0].text
+    except IndexError as e:
+        # No inventoryCnt class found = sold out at location
         mc_logger.error(f'{e.__class__}: {e}')
     else:
         if inventory != 'Sold Out':
@@ -80,14 +87,19 @@ def get_inventory(html: str):
     return None
 
 
-def get_open_box(html: str):
-    pattern = '(?s)(?<=opCostNew">)(.*?)(?=<)'
-    data = re.search(pattern, html)
+def get_open_box(tree: html.HtmlElement):
+    """
+    Give html.HtmlElement for single MC store, parse
+    and return open box price
+    :param tree: html.HtmlElement
+    :return: str, open box price, ex '$249.99'; None if doesn't exist
+    """
+    path = '//span[@id="opCostNew"]'
     try:
-        open_box = data.group(0).strip()
-    except AttributeError as e:
+        open_box = tree.xpath(path)[0].text
+    except IndexError as e:
         # No opCostNew id found = no open box available at location
-        mc_logger.error(f'{e.__class__}: {e}')
+        mc_logger.info(f'{e.__class__}: {e}')
     else:
         return open_box
     return None
@@ -149,10 +161,11 @@ def mc_run(submission):
     :return: dict, product_details and str, appropriate markdown
     """
     url = strip_url(submission.url)
-    html = get_html(url)
+    page = get_page(url)
+    text = page.text
 
-    metadata = get_metadata(html)
-    stores = get_stores(html)
+    metadata = get_metadata(text)
+    stores = get_stores(text)
     store_data = get_store_data(url, stores)
 
     markdown = mc_template.build_markdown(store_data, metadata, url)
