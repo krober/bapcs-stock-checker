@@ -48,12 +48,14 @@ def get_admin():
 
 
 def get_footer(mpn: str):
-    line_split = '  \n\n'
+    lines = []
 
-    lines = [
-        get_search_links(mpn),
-        get_admin(),
-    ]
+    if mpn is not None:
+        lines.append(get_search_links(mpn))
+
+    lines.append(get_admin())
+
+    line_split = '  \n\n'
 
     return line_split.join(lines)
 
