@@ -16,7 +16,6 @@ class EbaySimulation:
             'Seller Feedback': get_feedback(text),
             'Seller Score': get_score(tree),
             'Ebay Item Number': get_item_number(tree),
-            'Free Shipping': 'Yes' if is_free_shipping(tree) else 'No',
             'MPN (probably)': get_mpn(text),
             'Price': get_price(tree),
         }

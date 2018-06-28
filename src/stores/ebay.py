@@ -154,21 +154,6 @@ def get_mpn(text: str):
         return mpn
 
 
-def is_free_shipping(tree: html.HtmlElement):
-    """
-    Determines if product offers free shipping
-    :param tree: html.HtmlElement from lxml
-    :return: True if free, else False; None if not found
-    """
-    path = '//span[@id="fshippingCost"]'
-    ship_parent = get_xpath(path, tree)
-    if ship_parent is not None:
-        ship_child = ship_parent.getchildren()[0]
-        ship_text = ship_child.text
-        return ship_text == 'FREE'
-    return None
-
-
 @register('ebay.com')
 def eb_run(submission):
     """
@@ -192,7 +177,6 @@ def eb_run(submission):
         'Seller Feedback': get_feedback(text),
         'Seller Score': get_score(tree),
         'Ebay Item Number': get_item_number(tree),
-        'Free Shipping': 'Yes' if is_free_shipping(tree) else 'No',
         'MPN (probably)': get_mpn(text),
         'Price': get_price(tree),
     }
