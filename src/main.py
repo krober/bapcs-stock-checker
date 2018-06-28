@@ -155,9 +155,10 @@ def main(sub_to_stream: str):
             bot.run()
         except prawcore.exceptions.ResponseException as e:
             # network/response error from praw in main loop, okay to restart
+            wait_mins = 5
             wrapper_logger.error(f'{e.__class__}: e')
-            wrapper_logger.info(f'restarting in {wait_seconds * 5} seconds')
-            time.sleep(wait_seconds)
+            wrapper_logger.info(f'restarting in {wait_mins} minutes')
+            time.sleep(wait_seconds * wait_mins)
         except Exception as e:
             """
             catch any, wait an increasing amount of time, 
