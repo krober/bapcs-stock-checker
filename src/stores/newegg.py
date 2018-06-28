@@ -97,7 +97,11 @@ def ne_run(submission):
     :return: dict, product_details
     """
     # TODO: add markdown
-    url = convert_mobile_url(submission)
+    try:
+        url = convert_mobile_url(submission.url)
+    except AttributeError:
+        return None, None
+
     page = get_page(url)
     text = page.text
 
