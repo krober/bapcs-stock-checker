@@ -1,8 +1,9 @@
 import re
+
 import requests
 
-from stores.registration import register
 from logger import logger
+from stores.registration import register
 
 
 newegg_logger = logger.get_logger('Newegg', './logfile.log')
@@ -93,22 +94,9 @@ def ne_run(submission):
 
 
 def main():
-
-    # url = 'https://www.newegg.com/Product/Product.aspx?Item=N82E16813128972&ignorebbr=1'
-    #
-    # page = get_page(url)
-    # text = page.text
-    #
-    # price = get_price(text)
-    # mpn = get_mpn(text)
-    #
-    # print(price)
-    # print(mpn)
-
     pass
 
 
 if __name__ == '__main__':
     main()
-
 
