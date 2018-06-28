@@ -171,8 +171,8 @@ def eb_run(submission):
     }
 
     product_details = {
-        'mpn': listing_data.get('mpn'),
-        'price': listing_data.get('price'),
+        'mpn': listing_data.get('MPN (probably)'),
+        'price': listing_data.get('Price'),
     }
 
     if (listing_data.get('Seller') is None or
