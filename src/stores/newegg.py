@@ -9,6 +9,26 @@ from stores.registration import register
 newegg_logger = logger.get_logger('Newegg', './logfile.log')
 
 
+def convert_mobile_url(url: str):
+    """
+    Check for m.newegg.com...
+    :param url: str, mobile newegg url
+    :return: str, non-mobile link
+    """
+    if 'm.newegg.com' in url:
+        base_url = 'https://www.newegg.com/Product/Product.aspx?Item='
+        pattern = '(?s)(?<=products/)(.*?)(?=\?)'
+        item = re.search(pattern, url)
+        try:
+            item = item.group(0).strip()
+        except AttributeError as e:
+            newegg_logger.error(f'{e.__class__}: {e}')
+            raise e
+        else:
+            url = base_url + item
+    return url
+
+
 def get_page(url: str):
     """Simple request based on url"""
     headers = {
@@ -77,7 +97,8 @@ def ne_run(submission):
     :return: dict, product_details
     """
     # TODO: add markdown
-    page = get_page(submission.url)
+    url = convert_mobile_url(submission)
+    page = get_page(url)
     text = page.text
 
     mpn = get_mpn(text)
