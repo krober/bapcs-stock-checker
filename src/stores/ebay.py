@@ -11,6 +11,28 @@ from templates import eb_template
 ebay_logger = logger.get_logger('Ebay', './logfile.log')
 
 
+def convert_pages_url(url: str):
+    """
+    Given ebay Pages url, retrieve item page and continue parsing.  If
+    given standard url, immediately return it
+    :param url: str, ebay url
+    :return: str, /itm/ url; else None
+    """
+    if 'ebay.com/p/' in url:
+        text = get_page(url).text
+        base_url = 'https://www.ebay.com/itm/'
+        pattern = '(?s)(?<=data-itemid=")(.*?)(?=")'
+        item = re.search(pattern, text)
+        try:
+            item = item.group(0).strip()
+        except AttributeError as e:
+            ebay_logger.error(f'{e.__class__}:{e}')
+            return None
+        else:
+            url = base_url + item
+    return url
+
+
 def get_page(url: str):
     """Simple request based on url"""
     headers = {
@@ -155,7 +177,12 @@ def eb_run(submission):
     :return: dict, product_details
     """
     # TODO: add markdown
-    page = get_page(submission.url)
+    url = convert_pages_url(submission.url)
+
+    if url is None:
+        return None, None
+
+    page = get_page(url)
     text = page.text
     content = page.content
     tree = html.fromstring(content)

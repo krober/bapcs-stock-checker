@@ -35,7 +35,7 @@ class NeweggSimulation:
         # Should fail
         # url = 'https://www.newegg.com/Product/ComboBundleDetails.aspx?ItemList=Combo.3835779'
         #
-        NeweggSimulation.test(url)
+        # NeweggSimulation.test(url)
 
         pass
 
