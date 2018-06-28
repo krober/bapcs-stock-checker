@@ -85,32 +85,9 @@ def ra_run(submission):
 
 
 def main():
-
-    # url = 'https://www.rakuten.com/event/10-dollar-off-sitewide/?l-id=promo-10off-headertext'
-    # url = 'https://www.rakuten.com/shop/beachaudio/product/18851630/'
-    # url = 'https://www.rakuten.com/shop/adata/product/AX4U266638G16-DBG/?ranMID=36342&ranEAID=lw9MynSeamY&ranSiteID=lw9MynSeamY-NUY9LaKTHvykGmwGOmTmOQ&scid=af_linkshare&siteID=lw9MynSeamY-NUY9LaKTHvykGmwGOmTmOQ'
-    # url = 'https://www.rakuten.com/shop/adata/product/ASU650SS-960GT-C/'
-    # url = 'https://www.rakuten.com/shop/platinum-micro/product/CAOPTIXG24C/'
-    #
-    # page = get_page(url)
-    # text = page.text
-    #
-    # price = get_price(text)
-    # mpn = get_mpn(text)
-    #
-    # print(url)
-    # print(price)
-    # print(mpn)
-
     pass
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
 
