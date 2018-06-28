@@ -3,8 +3,9 @@ import requests
 
 from lxml import html
 
-from stores.registration import register
 from logger import logger
+from stores.registration import register
+from templates import eb_template
 
 
 ebay_logger = logger.get_logger('Ebay', './logfile.log')
@@ -80,7 +81,8 @@ def get_feedback(text: str):
     """
     Parses total feedback count from ebay page
     :param text: str, from requests.get().text
-    :return: int, total feedback for seller (stars); None if not available
+    :return: str, total feedback for seller (stars); None if not available
+    thousands separated
     """
     pattern = '(?s)(?<=feedback score: )(.*?)(?=")'
     data = re.search(pattern, text)
@@ -92,6 +94,7 @@ def get_feedback(text: str):
         return None
     else:
         feedback = int(feedback)
+        feedback = f'{feedback:,}'
         return feedback
 
 
@@ -157,20 +160,27 @@ def eb_run(submission):
     content = page.content
     tree = html.fromstring(content)
 
-    # item_number = get_item_number(tree)
-    mpn = get_mpn(text)
-    price = get_price(tree)
-    # seller = get_seller(tree)
-    # seller_feedback = get_feedback(text)
-    # seller_score = get_score(tree)
-    # free_shipping = is_free_shipping(tree)
-
-    product_details = {
-        'mpn': mpn,
-        'price': price,
+    listing_data = {
+        'Seller': get_seller(tree),
+        'Seller Feedback': get_feedback(text),
+        'Seller Score': get_score(tree),
+        'Ebay Item Number': get_item_number(tree),
+        'Free Shipping': 'Yes' if is_free_shipping(tree) else 'No',
+        'MPN (probably)': get_mpn(text),
+        'Price': get_price(tree),
     }
 
-    markdown = None
+    product_details = {
+        'mpn': listing_data.get('mpn'),
+        'price': listing_data.get('price'),
+    }
+
+    if (listing_data.get('Seller') is None or
+            listing_data.get('Seller Feedback') is None or
+            listing_data.get('Seller Score') is None):
+        markdown = None
+    else:
+        markdown = eb_template.build_markdown(listing_data)
 
     return product_details, markdown
 
