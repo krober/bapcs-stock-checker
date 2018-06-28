@@ -21,6 +21,9 @@ class NeweggSimulation:
         # url = 'https://www.newegg.com/Product/Product.aspx?Item=N82E16813128972&ignorebbr=1'
         #
         # Should work - mobile
+        # url = 'https://m.newegg.com/products/N82E16811352078'
+        #
+        # Should work - mobile
         # url = 'https://m.newegg.com/products/N82E16814137254?utm_medium=Email&utm_source=IGNEFL062818&cm_mmc=EMC-IGNEFL062818-_-EMC-062818-Index-_-DesktopGraphicsCards-_-14137254-S0A&ignorebbr=1'
         #
         # Should work
@@ -32,7 +35,7 @@ class NeweggSimulation:
         # Should fail
         # url = 'https://www.newegg.com/Product/ComboBundleDetails.aspx?ItemList=Combo.3835779'
         #
-        # NeweggSimulation.test(url)
+        NeweggSimulation.test(url)
 
         pass
 

@@ -17,7 +17,7 @@ def convert_mobile_url(url: str):
     """
     if 'm.newegg.com' in url:
         base_url = 'https://www.newegg.com/Product/Product.aspx?Item='
-        pattern = '(?s)(?<=products/)(.*?)(?=\?)'
+        pattern = '(?s)(?<=products/)[A-Za-z0-9]*'
         item = re.search(pattern, url)
         try:
             item = item.group(0).strip()
@@ -97,9 +97,9 @@ def ne_run(submission):
     :return: dict, product_details
     """
     # TODO: add markdown
-    url = convert_mobile_url(submission.url)
-
-    if url is None:
+    try:
+        url = convert_mobile_url(submission.url)
+    except:
         return None, None
 
     page = get_page(url)
