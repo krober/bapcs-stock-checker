@@ -23,7 +23,7 @@ def convert_mobile_url(url: str):
             item = item.group(0).strip()
         except AttributeError as e:
             newegg_logger.error(f'{e.__class__}: {e}')
-            raise e
+            return None
         else:
             url = base_url + item
     return url
@@ -97,9 +97,9 @@ def ne_run(submission):
     :return: dict, product_details
     """
     # TODO: add markdown
-    try:
-        url = convert_mobile_url(submission.url)
-    except AttributeError:
+    url = convert_mobile_url(submission.url)
+
+    if url is None:
         return None, None
 
     page = get_page(url)
