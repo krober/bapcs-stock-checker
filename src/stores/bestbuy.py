@@ -88,45 +88,9 @@ def bb_run(submission):
 
 
 def main():
-
-    # url = ''
-    # url = 'https://www.bestbuy.com/site/searchpage.jsp?id=pcat17071&st=logitech+g'
-    # url = 'https://www.bestbuy.com/site/dell-27-led-qhd-gsync-monitor-black/5293502.p?skuId=5293502'
-    # url = 'https://www.bestbuy.com/site/hp-omen-by-hp-desktop-intel-core-i5-8gb-memory-nvidia-geforce-gtx-1060-1tb-hard-drive-brushed-aluminum/5759916.p?skuId=5759916'
-    # url = 'https://www.bestbuy.com/site/cyberpowerpc-gamer-ultra-vr-desktop-amd-ryzen-7-series-16gb-memory-nvidia-geforce-gtx-1070-120gb-solid-state-drive-1tb-hdd-black/6092500.p'
-    #
-    # page = get_page(url)
-    # text = page.text
-    # content = page.content
-    # tree = html.fromstring(content)
-    #
-    # price = get_price(text)
-    # mpn = get_mpn(tree)
-    #
-    # print(url)
-    # print(price)
-    # print(mpn)
-
     pass
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
