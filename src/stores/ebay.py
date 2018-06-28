@@ -186,42 +186,9 @@ def eb_run(submission):
 
 
 def main():
-
-    # url = 'https://www.ebay.com/itm/NEW-AMD-RYZEN-7-2700X-8-Core-3-7-GHz-Socket-AM4-105W-YD270XBGAFBOX-Processor/273199602622'
-    # url = 'https://www.ebay.com/itm/Best-Buy-Gift-Card-25-50-100-or-150-Fast-Email-delivery/262075905712?var=560853814071&_trkparms=%26rpp_cid%3D5b2894c84de66764007d7240%26rpp_icid%3D56ec4a8ce4b00bcc855a5463'
-    # url = 'https://www.ebay.com/itm/Landmann-City-Lights-Memphis-Fire-Pit-Black-/182641297525'
-    # url = 'https://pages.ebay.com/promo/2018/0621/66698.html?_trkparms=%26clkid%3D4767729480946058037'
-    #
-    # page = get_page(url)
-    # text = page.text
-    # content = page.content
-    # tree = html.fromstring(content)
-    #
-    # item_number = get_item_number(tree)
-    # price = get_price(tree)
-    # seller = get_seller(tree)
-    # seller_feedback = get_feedback(text)
-    # seller_score = get_score(tree)
-    # mpn = get_mpn(text)
-    # free_shipping = is_free_shipping(tree)
-    #
-    # print(item_number)
-    # print(price)
-    # print(seller)
-    # print(seller_feedback)
-    # print(seller_score)
-    # print(mpn)
-    # print(free_shipping)
-
     pass
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
 
