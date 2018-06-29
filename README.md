@@ -7,7 +7,7 @@ Also, logs prices to db for possible price history analysis, but can be reconfig
 
 + Microcenter (Database Logging, Reddit Submission Replies)
 + Newegg (Database Logging)
-+ Ebay (Database Logging, No Reddit Submission yet, but in prog)
++ Ebay (Database Logging, Reddit Submission Replies)
 + Amazon (Database Logging)
 + BestBuy (Database Logging)
 + Frys (Database Logging)
