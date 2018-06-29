@@ -1,3 +1,6 @@
+import urllib.parse
+
+
 def none_to_empty_string(data: str):
     return '' if data is None else data
 
@@ -51,6 +54,7 @@ def get_footer(mpn: str):
     lines = []
 
     if mpn is not None:
+        mpn = urllib.parse.quote(mpn)
         lines.append(get_search_links(mpn))
 
     lines.append(get_admin())
