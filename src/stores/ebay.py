@@ -75,12 +75,24 @@ def get_price(tree: html.HtmlElement):
     :param tree: html.HtmlElement from lxml
     :return: int, rounded, if exists; else None
     """
-    path = '//span[@id="prcIsum"]'
-    price_tag = get_xpath(path, tree)
-    if price_tag is not None:
-        price = price_tag.get('content')
-        price = int(round(float(price)))
-        return price
+    paths = [
+        '//span[@id="prcIsum"]',
+        '//span[@id="mm-saleDscPrc"]',
+    ]
+    for path in paths:
+        price_tag = get_xpath(path, tree)
+        try:
+            pattern = '[0-9.]*[0-9.]'
+            price = re.search(pattern, price_tag.text).group(0).strip()
+            price = int(round(float(price)))
+        except AttributeError as e:
+            ebay_logger.error(f'{e.__class__}: {price_tag}: {e}')
+            continue
+        except TypeError as e:
+            ebay_logger.error(f'{e.__class__}: {price_tag.text}: {e}')
+            continue
+        else:
+            return price
     return None
 
 

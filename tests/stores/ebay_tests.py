@@ -40,7 +40,7 @@ class EbaySimulation:
     @staticmethod
     def run_test():
         # Should work
-        # url = 'https://www.ebay.com/itm/NEW-AMD-RYZEN-7-2700X-8-Core-3-7-GHz-Socket-AM4-105W-YD270XBGAFBOX-Processor/273199602622'
+        # url = 'https://www.ebay.com/itm/263771931884?ViewItem=&item=263771931884'
         #
         # Should work
         # url = 'https://www.ebay.com/itm/Best-Buy-Gift-Card-25-50-100-or-150-Fast-Email-delivery/262075905712?var=560853814071&_trkparms=%26rpp_cid%3D5b2894c84de66764007d7240%26rpp_icid%3D56ec4a8ce4b00bcc855a5463'
@@ -52,9 +52,9 @@ class EbaySimulation:
         # url = 'https://www.ebay.com/p/GIGABYTE-AORUS-GeForce-GTX-1080-Ti-11GB-Video-Card-GV-N108TAORUS-11GD/20019368148?iid=382497154524&_trkparms=5373%3A0%7C5374%3AFeatured'
         #
         # Should fail
-        # url = 'https://pages.ebay.com/promo/2018/0621/66698.html?_trkparms=%26clkid%3D4767729480946058037'
+        url = 'https://pages.ebay.com/promo/2018/0621/66698.html?_trkparms=%26clkid%3D4767729480946058037'
         #
-        # EbaySimulation.test(url)
+        EbaySimulation.test(url)
 
         pass
 
