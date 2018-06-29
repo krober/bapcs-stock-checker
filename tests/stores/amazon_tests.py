@@ -22,6 +22,9 @@ class AmazonSimulation:
         # url = 'https://www.amazon.com/Crucial-MX500-NAND-SATA-Internal/dp/B077SF8KMG'
         #
         # Should work
+        # url = 'https://www.amazon.com/gp/product/B073TQKNF2/'
+        #
+        # Should work
         # url = 'https://www.amazon.com/RIPJAWS-KM570-Cherry-Speed-Silver/dp/B01LZEVDKI/'
         #
         # Should work
@@ -33,7 +36,7 @@ class AmazonSimulation:
         # Should fail
         # url = 'https://www.amazon.com/Home-Audio-Electronics/b/ref=nav_shopall_hat?ie=UTF8&node=667846011'
         #
-        # AmazonSimulation.test(url)
+        AmazonSimulation.test(url)
 
         pass
 

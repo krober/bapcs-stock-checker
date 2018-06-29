@@ -28,13 +28,10 @@ def get_xpath(path: str, tree: html.HtmlElement):
     :return: element, based on path; or None if not found
     """
     try:
-        element = tree.xpath(path)[0]
-    except IndexError as e:
+        return tree.xpath(path)[0]
+    except IndexError:
         # Combo deals/splash pages/etc
-        amazon_logger.error(f'{e.__class__}: {path}: {e}')
-        return None
-    else:
-        return element
+        raise IndexError
 
 
 def extract_from_text(pattern: str, text: str):
@@ -61,13 +58,26 @@ def get_price(tree: html.HtmlElement):
     :param tree: html.HtmlElement from lxml
     :return: int, rounded, if exists; else None
     """
-    path = '//span[@id="priceblock_ourprice"]'
-    price_tag = get_xpath(path, tree)
-    if price_tag is not None:
-        price = price_tag.text[1:]
-        price = int(round(float(price)))
-        return price
-    return None
+    paths = [
+        '//span[@id="priceblock_ourprice"]',
+        '//span[@id="priceblock_dealprice"]',
+    ]
+    for path in paths:
+        try:
+            price_tag = get_xpath(path, tree)
+        except IndexError as e:
+            amazon_logger.error(f'{e.__class__}: {path}: {e}')
+            continue
+        else:
+            break
+    try:
+        return int(round(float(price_tag.text[1:])))
+    except UnboundLocalError as e:
+        amazon_logger.error(f'{e.__class__}: {e}')
+        return None
+    except TypeError as e:
+        amazon_logger.error(f'{e.__class__}: {price_tag.text}: {e}')
+        return None
 
 
 def get_mpn(text: str):
