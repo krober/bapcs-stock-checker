@@ -50,6 +50,7 @@ class EbaySimulation:
         #
         # Should work - /p/ link
         # url = 'https://www.ebay.com/p/GIGABYTE-AORUS-GeForce-GTX-1080-Ti-11GB-Video-Card-GV-N108TAORUS-11GD/20019368148?iid=382497154524&_trkparms=5373%3A0%7C5374%3AFeatured'
+        #
         # Should fail
         # url = 'https://pages.ebay.com/promo/2018/0621/66698.html?_trkparms=%26clkid%3D4767729480946058037'
         #
