@@ -36,7 +36,7 @@ class AmazonSimulation:
         # Should fail
         # url = 'https://www.amazon.com/Home-Audio-Electronics/b/ref=nav_shopall_hat?ie=UTF8&node=667846011'
         #
-        AmazonSimulation.test(url)
+        # AmazonSimulation.test(url)
 
         pass
 

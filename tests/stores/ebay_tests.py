@@ -46,15 +46,15 @@ class EbaySimulation:
         # url = 'https://www.ebay.com/itm/Best-Buy-Gift-Card-25-50-100-or-150-Fast-Email-delivery/262075905712?var=560853814071&_trkparms=%26rpp_cid%3D5b2894c84de66764007d7240%26rpp_icid%3D56ec4a8ce4b00bcc855a5463'
         #
         # Should work
-        # url = 'https://www.ebay.com/itm/GIGABYTE-AORUS-GeForce-GTX-1080-Ti-DirectX-12-GV-N108TAORUS-11GD-11GB-352-Bit-GD-/382497154524?_trksid=p2349526.m4383.l4275.c10#viTabs_0'
+        # url = 'https://www.ebay.com/itm/Dell-Latitude-5590-i7-8650U-32GB-Ram-512GB-SSD-IPS-1080p/273880535372?hash=item3fc48d514c:g:HycAAOSwMMJc8JJJ'
         #
         # Should work - /p/ link
         # url = 'https://www.ebay.com/p/GIGABYTE-AORUS-GeForce-GTX-1080-Ti-11GB-Video-Card-GV-N108TAORUS-11GD/20019368148?iid=382497154524&_trkparms=5373%3A0%7C5374%3AFeatured'
         #
         # Should fail
-        url = 'https://pages.ebay.com/promo/2018/0621/66698.html?_trkparms=%26clkid%3D4767729480946058037'
+        # url = 'https://pages.ebay.com/promo/2018/0621/66698.html?_trkparms=%26clkid%3D4767729480946058037'
         #
-        EbaySimulation.test(url)
+        # EbaySimulation.test(url)
 
         pass
 

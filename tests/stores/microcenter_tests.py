@@ -116,7 +116,7 @@ class MicrocenterSimulation:
         # url = 'http://www.microcenter.com/product/477236/BarraCuda_2TB_7200RPM_SATA_III_6Gb-s_35_Internal_Hard_Drive'
         #
         # Should work
-        # url = 'http://www.microcenter.com/product/503281/Inspiron_15_3567_156_Laptop_Computer_-_Black'
+        # url = 'https://www.microcenter.com/product/602834/b242-desktop-computer'
         #
         # Should Fail
         # url = 'http://www.microcenter.com/site/brands/brother_storefront.aspx'
