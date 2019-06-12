@@ -1,6 +1,6 @@
 import requests
 
-from lxml import etree, html
+from lxml import html
 
 from stores.registration import register
 from logger import logger
@@ -70,7 +70,7 @@ def fr_run(submission):
 
     try:
         tree = html.fromstring(content)
-    except etree.ParserError as e:
+    except Exception as e:
         # Frys mailer/multiproduct links
         frys_logger.error(f'{e.__class__}: {e}')
         return None, None
