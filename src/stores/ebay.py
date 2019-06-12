@@ -118,7 +118,7 @@ def get_feedback(text: str):
     :return: str, total feedback for seller (stars); None if not available
     thousands separated
     """
-    pattern = '(?s)(?<=feedback score: )(.*?)(?=")'
+    pattern = r'(?s)(?<=feedback score: )(.*?)(?=")'
     data = re.search(pattern, text)
     try:
         feedback = data.group(0).strip()
@@ -154,7 +154,7 @@ def get_mpn(text: str):
     :return: str, manuf. product number, if
     entered by seller; else None
     """
-    pattern = '(?s)(?<=itemprop="mpn">)(.*?)(?=<)'
+    pattern = r'(?s)(?<=itemprop="mpn">)(.*?)(?=<)'
     data = re.search(pattern, text)
     try:
         mpn = data.group(0).strip()

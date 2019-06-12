@@ -63,7 +63,7 @@ def get_mpn(text: str):
     :param text: str, requests.get().text to search
     :return: str, mpn
     """
-    pattern = "(?<=product_model:\[\\')(.*)(?=\\'\])"
+    pattern = r"(?<=product_model:\[\')(.*)(?=\')"
     mpn = extract_from_text(pattern, text)
     return mpn
 
@@ -74,7 +74,7 @@ def get_price(text: str):
     :param text: str, requests.get().text to search
     :return: int, price, rounded; None if unable to cast
     """
-    pattern = "(?<=product_sale_price:\[\\')(.*)(?=\\'\])"
+    pattern = r"(?<=product_sale_price:\[\')(.*)(?=\')"
     price_text = extract_from_text(pattern, text)
     try:
         price = int(round(float(price_text)))

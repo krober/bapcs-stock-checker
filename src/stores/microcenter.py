@@ -148,7 +148,7 @@ def get_metadata(text: str):
     :param text: str, raw html
     :return: dict, specified metadata
     """
-    pattern = "(?s)(?<=dataLayer = \[)(.*?)(?=\];)"
+    pattern = r'(?s)(?<=dataLayer = \[)(.*?)(?=\];)'
     all_metadata = extract_from_json(pattern, text)
     store_only_flag = 'Available for In-Store Pickup Only.'
     metadata = {
